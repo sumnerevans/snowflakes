@@ -1,3 +1,22 @@
+
+
+    canvas: null,
+    context: null,
+
+    init: function() {
+        this.canvas = document.getElementById('canvas');
+        this.context = this.canvas.getContext('2d');
+
+    },
+
+    Transform: function(cs, cy, sizex, sizey, fit) {
+        this.cx = cx;
+        this.cy = cy;
+        this.sizex = sizex;
+    }
+
+};
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
