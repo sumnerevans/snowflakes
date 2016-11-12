@@ -5,6 +5,7 @@ var Floor = function() {
 
     this.init = function() {
         container = new createjs.Container();
+        container.z = 0;
 
         this.resize();
         container.addChild(bitmap);
@@ -16,7 +17,6 @@ var Floor = function() {
         bitmap.x = transform.provide.minx;
 
         var scale = transform.provide.sizex / bitmap.image.width;
-        console.log(scale);
         bitmap.scaleX = scale;
         bitmap.scaleY = scale;
 

@@ -12,8 +12,8 @@ function Transform(minx, maxx, miny, maxy, alignx, aligny, fit) {
 	this.canvas = {};
 }
 Transform.prototype.update = function(width, height) {
-	var p = this.provide;
-	var c = this.canvas;
+	var p = this.provide = {};
+	var c = this.canvas = {};
 	var a = this.request;
 
 	c.width = width;
@@ -48,9 +48,27 @@ Transform.prototype.applyToContainer = function(container) {
 	container.setTransform(-tx, -ty, 1 / scale, 1 / scale);
 };
 
-Transform.prototype.fromScreen = function(sx, sy) {
+Transform.prototype.apply = function(sx, sy) {
 	return {
 		x: this.provide.minx + (sx / this.canvas.width) * this.provide.sizex,
 		y: this.provide.miny + (sy / this.canvas.height) * this.provide.sizey
 	};
 };
+Transform.prototype.unapply = function(sx, sy) {
+	return {
+		x: (sx - this.provide.minx) / this.provide.sizex * this.canvas.width,
+		y: (sy - this.provide.miny) / this.provide.sizey * this.canvas.height
+	};
+};
+Transform.prototype.clone = function() {
+	var out = new Transform(
+		this.request.minx,
+		this.request.maxx,
+		this.request.miny,
+		this.request.maxy,
+		this.request.alignx,
+		this.request.aligny,
+		this.request.fit);
+	out.update(this.canvas.width, this.canvas.height);
+	return out;
+}
