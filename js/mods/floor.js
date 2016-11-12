@@ -20,7 +20,9 @@ var Floor = function() {
         bitmap.scaleX = scale;
         bitmap.scaleY = scale;
 
-        bitmap.y = transform.provide.maxy- bitmap.image.height * scale;
+        bitmap.y = transform.provide.maxy - bitmap.image.height * scale;
+
+        stage.floor_height = bitmap.image.height * scale;
     };
 };
 

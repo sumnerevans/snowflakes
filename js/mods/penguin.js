@@ -2,6 +2,8 @@ var Penguin = function () {
     var image_front = new createjs.Bitmap('img/tux.png');
     image_front.tickEnabled = false;
 
+    var tallness;
+
     this.init = function () {
         container = new createjs.Container();
         this.resize();
@@ -11,15 +13,13 @@ var Penguin = function () {
     };
 
     this.resize = function () {
-        var scale = transform.provide.sizex / image_front.image.width / 10;
-        image_front.x =
-            (transform.provide.sizex - transform.provide.minx)/2
-            - (image_front.image.width * scale)/2
-            + transform.provide.minx;
+        var scale = 20 / image_front.image.width;
+        image_front.x = transform.provide.minx + transform.provide.sizex * .5;
         image_front.scaleX = scale;
         image_front.scaleY = scale;
-        image_front.y = transform.provide.maxy
-            - (image_front.image.height + 200) * scale;
+
+        tallness = scale * image_front.image.height;
+        image_front.y = transform.provide.maxy - stage.floor_height * .2 - tallness;
     };
 };
 
