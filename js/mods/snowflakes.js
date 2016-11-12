@@ -51,6 +51,17 @@ var Snowflakes = function() {
             return flake.y < transform.provide.maxy;
         });
     };
+
+    this.resize = function(current, old) {
+        container.children.forEach(function(flake) {
+            var x = flake.x;
+            x -= old.provide.minx;
+            x /= old.provide.sizex;
+            x *= current.provide.sizex;
+            x += current.provide.minx;
+            flake.x = x;
+        });
+    }
 };
 
 core.add_feature(new Snowflakes());

@@ -14,10 +14,12 @@ var core = new (function() {
     }
 
     this.resize_canvas = function () {
+        var old = transform.clone();
+
         do_resize();
 
         features.forEach(function(feature) {
-            if (feature.resize) feature.resize();
+            if (feature.resize) feature.resize(transform, old);
         });
 
         stage.update();
