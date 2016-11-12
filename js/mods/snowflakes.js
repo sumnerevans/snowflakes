@@ -1,6 +1,6 @@
 var Snowflakes = function() {
 
-    var container;
+    var containers = [];
     var images = [];
 
     for (var i = 0; i < 18; i++) {
@@ -31,45 +31,57 @@ var Snowflakes = function() {
     };
 
     this.init = function() {
-        container = new createjs.Container();
-        container.z = 1;
+        containers.push(new createjs.Container());
+        containers.push(new createjs.Container());
+        containers[0].z = 1;
+        containers[1].z = 11;
 
         // Create the inital snowflakes
         for (var i = 0; i < 100; i++) {
             var flake = this.create_snowflake();
             flake.y = transform.provide.maxy - Math.random() * transform.provide.sizey;
-            container.addChild(flake);
+
+            containers[core.rand(0, 1)].addChild(flake);
         }
 
-        stage.addChild(container);
+        for (i = 0; i < 3; i++) {
+            stage.addChild(containers[i]);
+        }
     };
 
     this.tick = function() {
-        for (var i = 0; i < container.children.length; i++) {
-            var flake = container.children[i];
+        for (var i = 0; i < containers.length; i++) {
+            var container = containers[i];
 
-            // Move the flake
-            flake.y += flake.speed.dy;
-            flake.x += flake.speed.dx;
-            flake.rotation += flake.speed.dtheta;
+            for (var j= 0; j < container.children.length; j++) {
+                var flake = container.children[j];
 
-            // If the flake has reached the bottom of the screen, replace it with one at the top.
-            if (flake.y > transform.provide.maxy) {
-                container.children[i] = this.create_snowflake();
+                // Move the flake
+                flake.y += flake.speed.dy;
+                flake.x += flake.speed.dx;
+                flake.rotation += flake.speed.dtheta;
+
+                // If the flake has reached the bottom of the screen, replace it with one at the top.
+                if (flake.y > transform.provide.maxy + 10) {
+                    container.children[j] = this.create_snowflake();
+                }
             }
         }
     };
 
     this.resize = function(current, old) {
-        container.children.forEach(function(flake) {
-            var x = flake.x;
-            x -= old.provide.minx;
-            x /= old.provide.sizex;
-            x *= current.provide.sizex;
-            x += current.provide.minx;
-            flake.x = x;
-        });
+        for (var i = 0; i < containers.length; i++) {
+            containers[i].children.forEach(function(flake) {
+                var x = flake.x;
+                x -= old.provide.minx;
+                x /= old.provide.sizex;
+                x *= current.provide.sizex;
+                x += current.provide.minx;
+                flake.x = x;
+            });
+        }
     };
+
 };
 
 core.add_feature(new Snowflakes());
