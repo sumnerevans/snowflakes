@@ -10,7 +10,7 @@ var Snowflakes = function() {
     }
 
     this.create_snowflake = function() {
-        var rand_img_num = core.rand(1, 16),
+        var rand_img_num = core.rand(0, 17),
             bitmap = new createjs.Bitmap(images[rand_img_num]),
             scale = core.rand_float(0.02, 0.1);
 
