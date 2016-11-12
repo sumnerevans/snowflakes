@@ -1,14 +1,16 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Run</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div onmousemove="mouseDetector(event)" class="wrapper">
-   	  <canvas id="canvas"></canvas>
-    </div>
-    <script src="js/script.js"></script>
-  </body>
+    <head>
+        <meta charset="utf-8">
+        <title>Snowflakes</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <body onload="canvas_init();">
+            <canvas id="canvas"></canvas>
+        </body>
+        <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+        <script src="js/transform.js"></script>
+        <script src="js/core.js"></script>
+    </body>
 </html>
