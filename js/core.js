@@ -62,4 +62,12 @@ var core = new (function() {
         features.push(feature);
     };
 
+    this.rand = function(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
+    this.rand_float = function(min, max) {
+        return Math.random() * (max - min) + min;
+    };
+
 })();
