@@ -20,6 +20,7 @@ var Snowflakes = function() {
         bitmap.scaleX = bitmap.scaleY = scale;
         bitmap.regX = bitmap.image.width / 2;
         bitmap.regY = bitmap.image.height / 2;
+        bitmap.size = bitmap.image.height * scale;
 
         bitmap.speed = {
             dx: core.rand_float(-0.2, 0.2),
@@ -37,7 +38,7 @@ var Snowflakes = function() {
         // Create the inital snowflakes
         for (var i = 0; i < 100; i++) {
             var flake = this.create_snowflake();
-            flake.y = transform.provide.maxy - Math.random() * transform.provide.sizey;
+            flake.y = transform.provide.maxy - Math.random() * transform.provide.sizey - flake.size;
             container.addChild(flake);
         }
 
@@ -54,7 +55,7 @@ var Snowflakes = function() {
             flake.rotation += flake.speed.dtheta;
 
             // If the flake has reached the bottom of the screen, replace it with one at the top.
-            if (flake.y > transform.provide.maxy) {
+            if (flake.y > transform.provide.maxy + flake.size) {
                 container.children[i] = this.create_snowflake();
             }
         }
