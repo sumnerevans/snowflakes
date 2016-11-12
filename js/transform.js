@@ -39,16 +39,18 @@ Transform.prototype.update = function(width, height) {
 	p.maxx = p.centerx + p.sizex * (1. - a.alignx);
 	p.miny = p.centery - p.sizey * a.aligny;
 	p.maxy = p.centery + p.sizey * (1. - a.aligny);
-}
+};
+
 Transform.prototype.applyToContainer = function(container) {
 	var scale = this.canvas.scale;
 	var tx = this.provide.minx / scale;
 	var ty = this.provide.miny / scale;
 	container.setTransform(-tx, -ty, 1 / scale, 1 / scale);
-}
+};
+
 Transform.prototype.fromScreen = function(sx, sy) {
 	return {
 		x: this.provide.minx + (sx / this.canvas.width) * this.provide.sizex,
 		y: this.provide.miny + (sy / this.canvas.height) * this.provide.sizey
-	}
-}
+	};
+};
