@@ -3,15 +3,29 @@ var Snowflakes = function() {
     var container;
     var images = [];
 
-    this.create_snowflake = function() {
-        var rand_img_num = core.rand(1, 16);
-        var bitmap = new createjs.Bitmap(images[rand_img_num]);
-        var scale = core.rand_float(0.02, 0.1);
+    for (var i = 0; i < 18; i++) {
+        var image = new Image();
+        image.src = 'img/flake{0}.png'.format(i);
+        images.push(image);
+    }
 
+    this.create_snowflake = function() {
+        var rand_img_num = core.rand(1, 16),
+            bitmap = new createjs.Bitmap(images[rand_img_num]),
+            scale = core.rand_float(0.02, 0.1);
+
+        bitmap.tickEnabled = false;
         bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
         bitmap.y = transform.provide.miny - Math.random() * transform.provide.sizey;
-        bitmap.scaleX = scale;
-        bitmap.scaleY = scale;
+        bitmap.scaleX = bitmap.scaleY = scale;
+        bitmap.regX = bitmap.image.width / 2;
+        bitmap.regY = bitmap.image.height / 2;
+
+        bitmap.speed = {
+            dx: core.rand_float(-0.2, 0.2),
+            dy: core.rand_float(0.2, 0.4),
+            dtheta: core.rand_float(-3, 3),
+        };
 
         return bitmap;
     };
@@ -20,13 +34,7 @@ var Snowflakes = function() {
         container = new createjs.Container();
         container.z = -1;
 
-        // Load the images
-        for (var i = 1; i <= 17; i++) {
-            var image = new Image();
-            image.src = 'img/flake{0}.png'.format(i);
-            images.push(image);
-        }
-
+        // Create the inital snowflakes
         for (var i = 0; i < 100; i++) {
             container.addChild(this.create_snowflake());
         }
@@ -37,7 +45,9 @@ var Snowflakes = function() {
     this.tick = function() {
         // TODO: Spawn more
         container.children = container.children.filter(function(flake) {
-            flake.y += 0.2;
+            flake.y += flake.speed.dy;
+            flake.x += flake.speed.dx;
+            flake.rotation += flake.speed.dtheta;
             return flake.y < transform.provide.maxy;
         });
     };
