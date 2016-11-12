@@ -32,7 +32,7 @@ var Snowflakes = function() {
 
     this.init = function() {
         container = new createjs.Container();
-        container.z = -1;
+        container.z = 1;
 
         // Create the inital snowflakes
         for (var i = 0; i < 100; i++) {
@@ -69,7 +69,7 @@ var Snowflakes = function() {
             x += current.provide.minx;
             flake.x = x;
         });
-    }
+    };
 };
 
 core.add_feature(new Snowflakes());

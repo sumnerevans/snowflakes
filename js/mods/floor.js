@@ -5,7 +5,7 @@ var Floor = function() {
 
     this.init = function() {
         container = new createjs.Container();
-        container.z = 0;
+        container.z = 20;
 
         this.resize();
         container.addChild(bitmap);
