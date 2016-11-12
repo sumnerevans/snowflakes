@@ -4,6 +4,7 @@ var transform = new Transform(0, 100, 0, 100, .5, 1, 1);
 var core = new (function() {
 
     var features = [];
+    var initialized = false;
 
     this.resize_canvas = function () {
         stage.canvas.width = window.innerWidth;
@@ -15,13 +16,22 @@ var core = new (function() {
     window.addEventListener('resize', this.resize_canvas, false);
 
     this.tick = function () {
+        if (!initialized) {
+            return;
+        }
+
+        features.forEach(function(feature) {
+            if (feature.tick) {
+                feature.tick();
+            }
+        });
         stage.update();
     };
 
     this.canvas_init = function() {
         stage = new createjs.Stage("canvas");
 
-        createjs.Ticker.setFPS(60);
+        createjs.Ticker.setFPS(30);
         createjs.Ticker.addEventListener("tick", this.tick);
 
         stage.canvas.style.backgroundColor = "#ff0800";
@@ -33,13 +43,15 @@ var core = new (function() {
         stage.addChild(circle);
         */
 
+        this.resize_canvas();
+
         features.forEach(function(feature) {
             if (feature.init) {
                 feature.init();
             }
         });
 
-        this.resize_canvas();
+        initialized = true;
     };
 
     this.add_feature = function(feature) {
