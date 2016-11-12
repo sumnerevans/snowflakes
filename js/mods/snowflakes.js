@@ -16,7 +16,7 @@ var Snowflakes = function() {
 
         bitmap.tickEnabled = false;
         bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
-        bitmap.y = transform.provide.miny - Math.random() * transform.provide.sizey * 3;
+        bitmap.y = transform.provide.miny - scale * bitmap.image.height;
         bitmap.scaleX = bitmap.scaleY = scale;
         bitmap.regX = bitmap.image.width / 2;
         bitmap.regY = bitmap.image.height / 2;
@@ -35,8 +35,10 @@ var Snowflakes = function() {
         container.z = -1;
 
         // Create the inital snowflakes
-        for (var i = 0; i < 300; i++) {
-            container.addChild(this.create_snowflake());
+        for (var i = 0; i < 100; i++) {
+            var flake = this.create_snowflake();
+            flake.y = transform.provide.maxy - Math.random() * transform.provide.sizey;
+            container.addChild(flake);
         }
 
         stage.addChild(container);
@@ -51,16 +53,8 @@ var Snowflakes = function() {
             flake.x += flake.speed.dx;
             flake.rotation += flake.speed.dtheta;
 
-            if (flake.x < -50) {
-                flake.x = transform.provide.maxx + 50;
-                console.log('flip');
-            } else if (flake.x > transform.provide.maxx + 50) {
-                flake.x = -50;
-                console.log('flip');
-            }
-
             // If the flake has reached the bottom of the screen, replace it with one at the top.
-            if (flake.y > transform.provide.maxy + 50) {
+            if (flake.y > transform.provide.maxy) {
                 container.children[i] = this.create_snowflake();
             }
         }
