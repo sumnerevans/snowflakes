@@ -4,21 +4,21 @@ var Snowflakes = function() {
     var images = [];
 
     this.create_snowflake = function() {
-        var rand_img_num = Math.floor(Math.random() * 16 + 1);
+        var rand_img_num = core.rand(1, 16);
         var bitmap = new createjs.Bitmap(images[rand_img_num]);
+        var scale = core.rand_float(0.02, 0.1);
 
-        bitmap.x = Math.random() * transform.provide.sizex + transform.provide.minx;
+        bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
         bitmap.y = transform.provide.miny - Math.random() * transform.provide.sizey;
-
-        var scale = Math.random() * 0.1 + 0.02;
-
         bitmap.scaleX = scale;
         bitmap.scaleY = scale;
+
         return bitmap;
     };
 
     this.init = function() {
         container = new createjs.Container();
+        container.z = -1;
 
         // Load the images
         for (var i = 1; i <= 17; i++) {
