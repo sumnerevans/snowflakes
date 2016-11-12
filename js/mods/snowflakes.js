@@ -44,7 +44,7 @@ var Snowflakes = function() {
             containers[core.rand(0, 1)].addChild(flake);
         }
 
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 2; i++) {
             stage.addChild(containers[i]);
         }
     };
@@ -61,7 +61,8 @@ var Snowflakes = function() {
                 flake.x += flake.speed.dx;
                 flake.rotation += flake.speed.dtheta;
 
-                // If the flake has reached the bottom of the screen, replace it with one at the top.
+                // If the flake has reached the bottom of the screen, replace
+                // it with one at the top.
                 if (flake.y > transform.provide.maxy + 10) {
                     container.children[j] = this.create_snowflake();
                 }
