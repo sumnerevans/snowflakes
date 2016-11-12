@@ -6,11 +6,20 @@ var core = new (function() {
     var features = [];
     var initialized = false;
 
-    this.resize_canvas = function () {
+    function do_resize() {
         stage.canvas.width = window.innerWidth;
         stage.canvas.height = window.innerHeight;
         transform.update(stage.canvas.width, stage.canvas.height);
         transform.applyToContainer(stage);
+    }
+
+    this.resize_canvas = function () {
+        do_resize();
+
+        features.forEach(function(feature) {
+            if (feature.resize) feature.resize();
+        });
+
         stage.update();
     };
     window.addEventListener('resize', this.resize_canvas, false);
@@ -21,9 +30,7 @@ var core = new (function() {
         }
 
         features.forEach(function(feature) {
-            if (feature.tick) {
-                feature.tick();
-            }
+            if (feature.tick) feature.tick();
         });
         stage.update();
     };
@@ -35,20 +42,17 @@ var core = new (function() {
         createjs.Ticker.addEventListener("tick", this.tick);
 
         stage.canvas.style.backgroundColor = "#ff0800";
-        /*
-        var circle = new createjs.Shape();
-        circle.graphics.beginFill("#FFFAFA").drawCircle(0, 0, 50);
-        circle.x = 50;
-        circle.y = 50;
-        stage.addChild(circle);
-        */
 
-        this.resize_canvas();
+        do_resize();
 
         features.forEach(function(feature) {
-            if (feature.init) {
-                feature.init();
-            }
+            if (feature.init) feature.init();
+        });
+
+        stage.sortChildren(function(a, b) {
+            if (a.z > b.z) { return 1; }
+            if (a.z < b.z) { return -1; }
+            return 0;
         });
 
         initialized = true;
