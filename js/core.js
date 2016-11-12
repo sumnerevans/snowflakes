@@ -1,32 +1,49 @@
 var stage;
 var transform = new Transform(0, 100, 0, 100, .5, 1, 1);
 
-function resize_canvas() {
-	stage.canvas.width = window.innerWidth;
-	stage.canvas.height = window.innerHeight;
-	transform.update(canvas.width, canvas.height);
-	transform.applyToContainer(stage);
-	stage.update();
-}
-window.addEventListener('resize', resize_canvas, false);
+var core = new (function() {
 
-function tick() {
-    stage.update();
-}
+    var features = [];
 
-function canvas_init() {
-	stage = new createjs.Stage("canvas");
+    this.resize_canvas = function () {
+        stage.canvas.width = window.innerWidth;
+        stage.canvas.height = window.innerHeight;
+        transform.update(stage.canvas.width, stage.canvas.height);
+        transform.applyToContainer(stage);
+        stage.update();
+    };
+    window.addEventListener('resize', this.resize_canvas, false);
 
-	createjs.Ticker.setFPS(60);
-	createjs.Ticker.addEventListener("tick", tick);
+    this.tick = function () {
+        stage.update();
+    };
 
-	stage.canvas.style.backgroundColor = "#ff0800";
+    this.canvas_init = function() {
+        stage = new createjs.Stage("canvas");
 
-	var circle = new createjs.Shape();
-	circle.graphics.beginFill("#FFFAFA").drawCircle(0, 0, 50);
-	circle.x = 50;
-	circle.y = 50;
-	stage.addChild(circle);
+        createjs.Ticker.setFPS(60);
+        createjs.Ticker.addEventListener("tick", this.tick);
 
-	resize_canvas();
-}
+        stage.canvas.style.backgroundColor = "#ff0800";
+        /*
+        var circle = new createjs.Shape();
+        circle.graphics.beginFill("#FFFAFA").drawCircle(0, 0, 50);
+        circle.x = 50;
+        circle.y = 50;
+        stage.addChild(circle);
+        */
+
+        features.forEach(function(feature) {
+            if (feature.init) {
+                feature.init();
+            }
+        });
+
+        this.resize_canvas();
+    };
+
+    this.add_feature = function(feature) {
+        features.push(feature);
+    };
+
+})();
