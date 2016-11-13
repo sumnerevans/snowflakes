@@ -16,23 +16,19 @@ var core = new (function() {
         transform.applyToContainer(stage);
     }
 
-    function key_down(key) {
-        $.each(features, function(name, feature) {
-            if (feature.key_event) feature.key_event(key, true);
-        });
-    }
-
-    function key_up(key) {
-        $.each(features, function(name, feature) {
-            if (feature.key_event) feature.key_event(key, false);
-        });
-    }
-
     function call_feature(func, args) {
         for (var i in features) {
             var feature = features[i];
             if (feature[func]) feature[func].apply(feature, args);
         }
+    }
+
+    function key_down(key) {
+        call_feature("key_event", [key, true]);
+    }
+
+    function key_up(key) {
+        call_feature("key_event", [key, false]);
     }
 
     document.onkeydown = key_down;
