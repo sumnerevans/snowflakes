@@ -11,8 +11,11 @@
         <script src="js/transform.js"></script>
         <script src="js/core.js"></script>
 
+<<<<<<< HEAD
         <script src="js/mods/blocks.js"></script>
         <script src="js/mods/candy_cane.js"></script>
+=======
+>>>>>>> 659d9fdeff0179a7920b190215ac2b47eb610fca
         <script src="js/mods/floor.js"></script>
         <script src="js/mods/penguin.js"></script>
         <script src="js/mods/snowflakes.js"></script>

@@ -1,12 +1,6 @@
 var UserCustomize = function() {
-    var hex = "0123456789ABCDEF";
-
     function rand_color() {
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
-            color += hex.charAt(core.rand(0, 16));
-        }
-        return color;
+        return "#" + ("000000" + core.rand(0, 1 << 24 - 1).toString(16)).slice(-6);
     }
 
     this.key_event = function(key, state) {
