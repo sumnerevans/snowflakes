@@ -82,14 +82,14 @@ var core = new (function() {
         add_event_listener: function(event, fn, callee) {
             this.event_listeners[event] = this.event_listeners[event] || [];
 
-            this.event_listeners[event].push({fn: fn, callee: callee});
+            if (callee) fn = fn.bind(callee);
+            this.event_listeners[event].push(fn);
         },
         fire_event: function(event, args) {
             args.push(event);
             var forevent = this.event_listeners[event];
             if (forevent) for (var i in forevent) {
-                var e = forevent[i];
-                e.fn.apply(e.callee, args);
+                forevent[i].apply(undefined, args);
             }
         }
     }
