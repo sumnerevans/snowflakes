@@ -39,7 +39,7 @@ var Snowflakes = function() {
 
         bitmap.image = images[rand_img_num];
 
-        bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
+        bitmap.x = core.rand(transform.provide.minx, transform.provide.maxx);
         bitmap.y = transform.provide.miny - scale * bitmap.image.height;
         bitmap.scaleX = bitmap.scaleY = scale;
         bitmap.regX = bitmap.image.width / 2;
