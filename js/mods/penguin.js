@@ -15,8 +15,10 @@ var Penguin = function () {
         container.addChild(image_front);
         container.z = 10;
         stage.addChild(container);
+    };
 
-        mods.snowflakes.add_event_listener('click', on_snowflake_click);
+    this.post_init = function() {
+        mods.snowflakes.add_event_listener('pop', on_snowflake_pop);
     };
 
     this.resize = function () {
@@ -46,8 +48,8 @@ var Penguin = function () {
         t_current = t;
     };
 
-    function on_snowflake_click(event, flake, snowflake_counter) {
-        if (snowflake_counter % 12 === 0) {
+    function on_snowflake_pop(event, flake, snowflake_counter) {
+        if (snowflake_counter % 12 === 0 && pause_motion <= 0) {
             pause_motion = 200;
         }
     }

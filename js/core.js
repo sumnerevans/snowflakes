@@ -90,7 +90,6 @@ var core = new (function() {
 
         inter.add_event_listener = function(event, fn, callee) {
             var listeners = event_listeners[event] = event_listeners[event] || [];
-            console.log(listeners, event);
 
             if (callee) fn = fn.bind(callee);
             listeners.push(fn);
