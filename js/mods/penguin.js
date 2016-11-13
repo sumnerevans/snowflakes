@@ -55,12 +55,12 @@ var Penguin = function () {
             if (p > 0 && p < 1 && Math.floor(1000*p) % 150 == 0) {
                 /* Do a bernoulli trial with probability 0.3 of success
                  * to change directions */
-                if (Math.random() < 0.3) speed *= -1;
+                if (Math.random() < 0.3) speed *= -0.25;
             }
             image_front.x += speed;
 
             // Don't let Tux get away too far
-            if ((p > 1 && speed > 0) || (p < 0 && speed < 0)) speed *= -1;
+            if ((p > 1 && speed > 0) || (p < 0 && speed < 0)) speed *= -0.25;
         }
     };
 
