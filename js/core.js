@@ -24,11 +24,11 @@ var core = new (function() {
     }
 
     function key_down(key) {
-        call_feature("key_event", [key, true]);
+        call_feature('key_event', [key, true]);
     }
 
     function key_up(key) {
-        call_feature("key_event", [key, false]);
+        call_feature('key_event', [key, false]);
     }
 
     document.onkeydown = key_down;
@@ -39,7 +39,7 @@ var core = new (function() {
 
         do_resize();
 
-        call_feature("resize", [transform, old]);
+        call_feature('resize', [transform, old]);
 
         stage.update();
     };
