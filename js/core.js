@@ -65,7 +65,7 @@ var core = new (function() {
         createjs.Ticker.setFPS(30);
         createjs.Ticker.addEventListener("tick", this.tick);
 
-        this.set_background({color: "#ff0800"});
+        this.set_background({color: "rgb(15, 50, 100)"});
 
         do_resize();
 
@@ -84,7 +84,10 @@ var core = new (function() {
 
     this.add_feature = function(feature) {
         features.push(feature);
-        if (feature.expose) mods[feature.name] = feature.expose;
+        if (feature.expose) {
+            feature.expose.feature = feature;
+            mods[feature.name] = feature.expose;
+        }
     };
 
     this.rand = function(min, max) {
