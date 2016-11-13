@@ -41,6 +41,7 @@ var Blocks = function() {
     }
 
     function on_block_drag(event) {
+        if (core.mouse_button === 'left') { return; }
         if (!dragging) {
             dragging = create_block(event.rawX, event.rawY);
             blocks.push(dragging);
@@ -51,6 +52,7 @@ var Blocks = function() {
     }
 
     function on_block_dragstop(event) {
+        if (core.mouse_button === 'left') { return; }
         dragging.start_fall = current_t;
         dragging.start_fall_y = dragging.y;
         dragging.falling = true;
