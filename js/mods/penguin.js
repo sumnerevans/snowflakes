@@ -5,6 +5,9 @@ var Penguin = function () {
     image_front.regY = 600;
 
     var tallness;
+    var pause_motion = 0;
+    var t_offset = 0;
+    var t_current = 0;
 
     this.init = function () {
         container = new createjs.Container();
@@ -12,6 +15,8 @@ var Penguin = function () {
         container.addChild(image_front);
         container.z = 10;
         stage.addChild(container);
+
+        mods.snowflakes.add_event_listener('click', on_snowflake_click);
     };
 
     this.resize = function () {
@@ -22,14 +27,30 @@ var Penguin = function () {
 
         tallness = scale * image_front.image.height;
         image_front.y = transform.provide.maxy
-                        - mods.floor.height * .2
-                        - tallness
-                        + image_front.regY * scale;
+            - mods.floor.height * .2
+            - tallness
+            + image_front.regY * scale;
     };
 
     this.tick = function (t) {
-        image_front.rotation = 6*Math.sin(0.013*t);
+        image_front.rotation = 6 * Math.sin(0.013 * t);
+
+        if (pause_motion > 0) {
+            var dt = t - t_current;
+            pause_motion--;
+            t_offset += dt;
+        } else {
+            image_front.x = 20 + (50 * Math.sin(0.0001 * (t - t_offset)));
+        }
+
+        t_current = t;
     };
+
+    function on_snowflake_click(event, flake, snowflake_counter) {
+        if (snowflake_counter % 12 === 0) {
+            pause_motion = 200;
+        }
+    }
 };
 
 core.add_feature('penguin', new Penguin());
