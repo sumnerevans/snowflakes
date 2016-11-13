@@ -15,8 +15,8 @@ var Blocks = function() {
     };
 
     this.post_init = function() {
-        mods.floor.add_event_listener('drag', on_floor_drag);
-        mods.floor.add_event_listener('dragstop', on_floor_dragstop);
+       mods.floor.add_event_listener('drag', on_floor_drag);
+       mods.floor.add_event_listener('dragstop', on_floor_dragstop);
     };
 
     function create_block(x, y) {
