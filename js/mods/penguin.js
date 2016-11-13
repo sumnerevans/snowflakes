@@ -29,7 +29,7 @@ var Penguin = function () {
 
         tallness = scale * image_front.image.height;
         image_front.y = transform.provide.maxy
-            - mods.floor.height * .2
+            - mods.floor.height * .1
             - tallness
             + image_front.regY * scale;
     };
