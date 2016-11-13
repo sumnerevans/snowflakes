@@ -9,6 +9,8 @@ var core = new (function() {
 
     var start = Date.now();
 
+    this.mouse_button = null;
+
     function do_resize() {
         stage.canvas.width = window.innerWidth;
         stage.canvas.height = window.innerHeight;
@@ -56,7 +58,21 @@ var core = new (function() {
     };
 
     this.canvas_init = function() {
-        stage = new createjs.Stage("canvas");
+        window.oncontextmenu = function() {
+            return false;
+        };
+
+        document.body.onmousedown = function (e) {
+            e = e || window.event;
+
+            if ('which' in e) {  // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
+                core.mouse_button = e.which === 3 ? 'right' : 'left';
+            } else if ('button' in e) { // IE, Opera
+                core.mouse_button = e.button === 2 ? 'right' : 'left';
+            }
+        };
+
+        stage = new createjs.Stage('canvas');
 
         createjs.Ticker.setFPS(30);
         createjs.Ticker.addEventListener("tick", this.tick);

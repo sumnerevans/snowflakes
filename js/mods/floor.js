@@ -41,7 +41,7 @@ var Floor = function() {
 
     this.set_event_handle = function(fire) { fire_event = fire; };
 
-    function on_drag() {
+    function on_drag(e) {
         fire_event('drag', Array.prototype.slice.call(arguments));
     }
 

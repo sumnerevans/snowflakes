@@ -49,12 +49,14 @@ var Snowballs = function() {
     }
 
     function on_drag(event) {
+        if (core.mouse_button === 'right') { return; }
         if (!drag_start) {
             drag_start = transform.apply(event.rawX, event.rawY);
         }
     }
 
     function on_dragstop(event) {
+        if (core.mouse_button === 'right') { return; }
         if (drag_start) {
             var drag_end = transform.apply(event.rawX, event.rawY);
             var dx = drag_end.x - drag_start.x;
