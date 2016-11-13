@@ -81,12 +81,10 @@ var Peppermints = function() {
 
     this.resize = function(current, old) {
         container.children.forEach(function(mint) {
+            var pos = current.redistribute(old, mint.x, mint.y);
+            mint.x = pos.x;
+            mint.y = pos.y;
             var x = mint.x;
-            x -= old.provide.minx;
-            x /= old.provide.sizex;
-            x *= current.provide.sizex;
-            x += current.provide.minx;
-            mint.x = x;
         });
     };
 

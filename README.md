@@ -13,5 +13,7 @@ Called 30 times per second. Takes an argument `time` which represents the time (
 Called if the canvas is resized after init. Takes arguments `transform, old` which represent the current transform and the transform before the resize.
 #### key_event(key, state)
 Called when a key is pressed. Takes arguments `key, state` which store a standard KeyboardEvent and whether it was a press (true) / release (false), respectively.
-## Feature exposure
-Each feature must also provide a string `name`. Then other features will be able to access the provided object `expose` at `mods.[name]`. For example, this is used by `snowflakes.js` to provide `mods.snowflakes.add_pop_listener(func)`.
+#### get_interface()
+Called in `add_feature`. Returns an object that should be exposed to other features as `mods.[featurename]`. A function `add_event_listener(event, fn)` will be added to the object. If `get_interface` is not present or returns undefined, an empty object will be used instead.
+#### set_event_handle(handle)
+Called in `add_feature`. Passes a function `handle` used to fire events on this feature. For example, `handle('eventname', [argument1, argument2])` calls all listeners for event "eventname" on this feature with the arguments `argument1, argument2`.

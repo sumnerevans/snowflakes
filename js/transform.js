@@ -60,6 +60,24 @@ Transform.prototype.unapply = function(sx, sy) {
 		y: (sy - this.provide.miny) / this.provide.sizey * this.canvas.height
 	};
 };
+Transform.prototype.redistribute = function(old, oldx, oldy) {
+	var x = oldx;
+    x -= old.provide.minx;
+    x /= old.provide.sizex;
+    x *= this.provide.sizex;
+    x += this.provide.minx;
+
+    var y = oldy;
+    y -= old.provide.miny;
+    y /= old.provide.sizey;
+    y *= this.provide.sizey;
+    y += this.provide.miny;
+
+	return {
+		x: x,
+		y: y
+	};
+};
 Transform.prototype.clone = function() {
 	var out = new Transform(
 		this.request.minx,

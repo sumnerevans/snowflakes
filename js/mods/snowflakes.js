@@ -93,12 +93,10 @@ var Snowflakes = function() {
     this.resize = function(current, old) {
         for (var i = 0; i < containers.length; i++) {
             containers[i].children.forEach(function(flake) {
+                var pos = current.redistribute(old, flake.x, flake.y);
+                flake.x = pos.x;
+                flake.y = pos.y;
                 var x = flake.x;
-                x -= old.provide.minx;
-                x /= old.provide.sizex;
-                x *= current.provide.sizex;
-                x += current.provide.minx;
-                flake.x = x;
             });
         }
     };
