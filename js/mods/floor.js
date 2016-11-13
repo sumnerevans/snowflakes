@@ -31,6 +31,12 @@ var Floor = function() {
         inter.height = bitmap.image.height * scale;
     };
 
+    inter.hit_test = function(x, y) {
+        var pt = container.localToLocal(x, y, bitmap);
+        var hit = bitmap.hitTest(pt.x, pt.y);
+        return hit;
+    };
+
     this.get_interface = function() { return inter; };
 
     this.set_event_handle = function(fire) { fire_event = fire; };

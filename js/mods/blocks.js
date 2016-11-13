@@ -65,9 +65,9 @@ var Blocks = function() {
                 block.y += 0.0098 * (t - block.start_fall);
 
                 // Stop falling when it hits the gound
-                if (block.y + (block.scaleY * block.image.height) >= transform.provide.sizey - mods.floor.height) {
+                var bottom = block.y + block.scaleY * block.regY;
+                if (bottom > transform.provide.maxy - mods.floor.height && mods.floor.hit_test(block.x, bottom)) {
                     block.falling = false;
-                    block.y = (transform.provide.sizey - mods.floor.height) - (block.scaleY * block.image.height) / 1.5;
                 }
 
                 blocks.forEach(function(b) {
