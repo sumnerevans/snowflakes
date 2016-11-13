@@ -25,6 +25,9 @@ var Floor = function() {
 
         bitmap.y = transform.provide.maxy - bitmap.image.height * scale;
 
+        bitmap.on('pressmove', on_drag);
+        bitmap.on('pressup', on_drag_stop);
+
         inter.height = bitmap.image.height * scale;
     };
 
@@ -33,8 +36,13 @@ var Floor = function() {
     this.set_event_handle = function(fire) { fire_event = fire; };
 
     function on_drag() {
-        fire_event('drag', ['awesome']);
-    };
+        fire_event('drag', Array.prototype.slice.call(arguments));
+    }
+
+    function on_drag_stop() {
+        fire_event('dragstop', Array.prototype.slice.call(arguments));
+    }
+
 };
 
 core.add_feature('floor', new Floor());
