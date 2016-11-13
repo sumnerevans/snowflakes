@@ -81,7 +81,7 @@ var core = new (function() {
     this.add_feature = function(name, feature) {
         features[name] = feature;
 
-        var event_listeners = [];
+        var event_listeners = {};
 
         var inter = feature.get_interface ? (feature.get_interface() || {}) : {};
         inter.name = name;
@@ -89,14 +89,16 @@ var core = new (function() {
         mods[name] = inter;
 
         inter.add_event_listener = function(event, fn, callee) {
-            event_listeners[event] = event_listeners[event] || [];
+            var listeners = event_listeners[event] = event_listeners[event] || [];
+            console.log(listeners, event);
 
             if (callee) fn = fn.bind(callee);
-            event_listeners[event].push(fn);
+            listeners.push(fn);
         };
 
         if (feature.set_event_handle) feature.set_event_handle( function(event, args) {
             args.push(event);
+
             var forevent = event_listeners[event];
             if (forevent) for (var i in forevent) {
                 forevent[i].apply(undefined, args);
