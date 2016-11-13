@@ -20,7 +20,6 @@ var Peppermints = function() {
 
     this.post_init = function() {
         mods.snowflakes.add_event_listener('pop', function() {
-            console.log(to_wait);
             to_wait -= 10;
         });
     };
@@ -52,6 +51,7 @@ var Peppermints = function() {
             peppermint_counter++;
             fire_event('pop', [event, bitmap, peppermint_counter]);
             container.removeChild(bitmap);
+            mods.penguin.spawn();
         });
 
         return bitmap;
@@ -80,7 +80,7 @@ var Peppermints = function() {
         }
     };
 
-this.resize = function(current, old) {
+    this.resize = function(current, old) {
         container.children.forEach(function(mint) {
             var x = mint.x;
             x -= old.provide.minx;

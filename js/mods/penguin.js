@@ -5,12 +5,13 @@ var Penguin = function () {
     image_front.regY = 600;
 
     var tallness;
+    var vis = false;
 
     this.init = function () {
         container = new createjs.Container();
         this.resize();
-        container.addChild(image_front);
         container.z = 10;
+
         stage.addChild(container);
     };
 
@@ -29,6 +30,17 @@ var Penguin = function () {
 
     this.tick = function (t) {
         image_front.rotation = 6*Math.sin(0.013*t);
+    };
+
+    this.get_interface = function() {
+        return {
+            spawn: function() { 
+                if (!vis) {
+                    container.addChild(image_front);
+                    vis = true;
+                }
+            }
+        };
     };
 };
 
