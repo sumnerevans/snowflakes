@@ -51,7 +51,6 @@ var Peppermints = function() {
             peppermint_counter++;
             fire_event('pop', [event, bitmap, peppermint_counter]);
             container.removeChild(bitmap);
-            mods.penguin.spawn();
         });
 
         return bitmap;

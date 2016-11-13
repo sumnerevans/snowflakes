@@ -15,6 +15,15 @@ var Penguin = function () {
         stage.addChild(container);
     };
 
+    this.post_init = function () {
+        mods.peppermints.add_event_listener('pop', function() {
+            if (!vis) {
+                vis = true;
+                container.addChild(image_front);
+            }
+        });
+    };
+
     this.resize = function () {
         var scale = 13 / image_front.image.width;
         image_front.x = transform.provide.minx + transform.provide.sizex * .5;
@@ -33,14 +42,7 @@ var Penguin = function () {
     };
 
     this.get_interface = function() {
-        return {
-            spawn: function() { 
-                if (!vis) {
-                    container.addChild(image_front);
-                    vis = true;
-                }
-            }
-        };
+        return {};
     };
 };
 

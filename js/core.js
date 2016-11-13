@@ -86,15 +86,15 @@ var core = new (function() {
         var inter = feature.get_interface ? (feature.get_interface() || {}) : {};
         inter.name = name;
         inter.feature = feature;
-        mods[name] = inter;
 
         inter.add_event_listener = function(event, fn, callee) {
             var listeners = event_listeners[event] = event_listeners[event] || [];
-            console.log(listeners, event);
 
             if (callee) fn = fn.bind(callee);
             listeners.push(fn);
         };
+
+        mods[name] = inter;
 
         if (feature.set_event_handle) feature.set_event_handle( function(event, args) {
             args.push(event);
