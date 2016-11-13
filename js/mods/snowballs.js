@@ -1,4 +1,4 @@
-var Peppermints = function() {
+var Snowballs = function() {
     var container;
 
     var peppermint_counter = 0;
@@ -32,12 +32,12 @@ var Peppermints = function() {
 
         var scale = 10 / image.width;
 
-        bitmap.size = image.height * scale;
         bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
-        bitmap.y = transform.provide.miny - bitmap.size;
+        bitmap.y = transform.provide.miny - scale * image.height;
         bitmap.scaleX = bitmap.scaleY = scale;
         bitmap.regX = image.width / 2;
         bitmap.regY = image.height / 2;
+        bitmap.size = image.height * scale;
 
         bitmap.speed = {
             dx: core.rand_float(-0.2, 0.2),
@@ -58,43 +58,23 @@ var Peppermints = function() {
     }
 
     this.tick = function() {
-        if (to_wait < 0) {
-            to_wait = initial_wait;
-            container.addChild(create_peppermint());
-        }
-
         for (var i in container.children) {
-            var mint = container.children[i];
+            var ball = container.children[i];
 
             // Move the mint
-            mint.y += mint.speed.dy;
-            mint.x += mint.speed.dx;
-            mint.rotation += mint.speed.dtheta;
+            ball.speed.dy += .1;
+            ball.y += ball.speed.dy;
+            ball.x += ball.speed.dx;
+            ball.rotation += ball.speed.dtheta;
 
             // If the mint has reached the bottom of the screen, replace
             // it with one at the top.
-            if (mint.y > transform.provide.maxy + mint.size) {
+            if (ball.y > transform.provide.maxy - mods.floor.height * .2) {
                 container.removeChild(mint);
+                fire_event('hit', [ball]);
             }
         }
     };
-
-    this.resize = function(current, old) {
-        container.children.forEach(function(mint) {
-            var x = mint.x;
-            x -= old.provide.minx;
-            x /= old.provide.sizex;
-            x *= current.provide.sizex;
-            x += current.provide.minx;
-            mint.x = x;
-        });
-    };
-
-    this.get_interface = function() {
-        return {
-            get_pop_count: function() { return peppermint_counter; }
-        };
-    };
 };
 
-core.add_feature('peppermints', new Peppermints());
+core.add_feature('snowballs', new Snowballs());
