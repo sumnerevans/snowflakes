@@ -13,6 +13,21 @@ var core = new (function() {
         transform.applyToContainer(stage);
     }
 
+    function key_down(key) {
+        features.forEach(function(feature) {
+            if (feature.key_event) feature.key_event(key, true);
+        });
+    }
+
+    function key_up(key) {
+        features.forEach(function(feature) {
+            if (feature.key_event) feature.key_event(key, false);
+        });
+    }
+
+    document.onkeydown = key_down;
+    document.onkeyup = key_up;
+
     this.resize_canvas = function () {
         var old = transform.clone();
 
@@ -43,7 +58,7 @@ var core = new (function() {
         createjs.Ticker.setFPS(30);
         createjs.Ticker.addEventListener("tick", this.tick);
 
-        stage.canvas.style.backgroundColor = "#ff0800";
+        this.set_background({color: "#ff0800"});
 
         do_resize();
 
@@ -72,4 +87,7 @@ var core = new (function() {
         return Math.random() * (max - min) + min;
     };
 
+    this.set_background = function(back) {
+        if (back.color) stage.canvas.style.backgroundColor = back.color;
+    }
 })();
