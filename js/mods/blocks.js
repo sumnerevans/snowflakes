@@ -1,8 +1,9 @@
 var Blocks = function() {
-    var blocks = [];
     var container;
     var dragging;
     var current_t;
+
+    var inter = {};
 
     var block_img = new Image();
     block_img.src = 'img/snow-block.png';
@@ -17,6 +18,10 @@ var Blocks = function() {
     this.post_init = function() {
         mods.floor.add_event_listener('drag', on_block_drag);
         mods.floor.add_event_listener('dragstop', on_block_dragstop);
+
+        mods.snowballs.add_hittable(function(ball) {
+            return inter.hit_test(ball.x, ball.y);
+        });
     };
 
     function create_block(x, y) {
@@ -36,18 +41,47 @@ var Blocks = function() {
             on_block_drag.apply(undefined, arguments);
         });
         block.on('pressup', on_block_dragstop);
+        block.on('click', function(e) {
+            if (core.mouse_button === 'right') { return; }
+            block.supports.forEach(function(b) {
+                b.collapse_in = 0;
+            });
+
+            container.removeChild(block);
+        });
+
+        block.unsupport = function(t) {
+            t = t || 5;
+            block.supports.forEach(function(b) {
+                if (b) b.collapse_in = t;
+            });
+            block.supports = [];
+            block.supported_by = undefined;
+        };
+
+        block.supports = [];
+        block.collapse_in = -1;
 
         return block;
     }
 
+    var first_drag = true;
     function on_block_drag(event) {
         if (core.mouse_button === 'left') { return; }
         if (!dragging) {
             dragging = create_block(event.rawX, event.rawY);
-            blocks.push(dragging);
             container.addChild(dragging);
         }
 
+        if (first_drag) {
+            first_drag = false;
+
+            if (dragging.supported_by) {
+                var index = dragging.supported_by.supports.indexOf(dragging);
+                dragging.supported_by.supports.splice(index, 1);
+            }
+            dragging.unsupport();
+        }
         move_block(event.rawX, event.rawY);
     }
 
@@ -57,6 +91,7 @@ var Blocks = function() {
         dragging.start_fall_y = dragging.y;
         dragging.falling = true;
         dragging = null;
+        first_drag = true;
     }
 
     function move_block(rawX, rawY) {
@@ -65,8 +100,29 @@ var Blocks = function() {
         dragging.y = pos.y;
     }
 
+    inter.hit_test = function(x, y) {
+        for (var i in container.children) {
+            var block = container.children[i];
+            var pt = container.localToLocal(x, y, block);
+            if (block.hitTest(pt.x, pt.y)) return true;
+        }
+    };
+
+    this.get_interface = function() { return inter; };
+
     this.tick = function(t) {
-        blocks.forEach(function(block) {
+        container.children.forEach(function(block) {
+            if (block.collapse_in >= 0) {
+                if (block.collapse_in === 0) {
+                    block.falling = true;
+                    block.start_fall = current_t;
+                    block.start_fall_y = block.y;
+                    block.unsupport();
+                }
+
+                block.collapse_in--;
+            }
+
             if (block.falling) {
                 block.y += 0.0098 * (t - block.start_fall);
 
@@ -76,7 +132,8 @@ var Blocks = function() {
                     block.falling = false;
                 }
 
-                blocks.forEach(function(b) {
+                // Make blocks rest on one another
+                container.children.forEach(function(b) {
                     if (b === block || b.falling ||
                         b.x + b.image.width * b.scaleX < block.x ||
                         b.x > block.x + block.image.width * block.scaleX ||
@@ -86,6 +143,8 @@ var Blocks = function() {
 
                     var btop = b.y - b.scaleY * b.regY;
                     if (bottom >= btop) {
+                        b.supports.push(block);
+                        block.supported_by = b;
                         block.falling = false;
                         block.y = btop - block.scaleY * block.regY;
                     }
