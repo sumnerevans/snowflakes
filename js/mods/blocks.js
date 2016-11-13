@@ -8,6 +8,9 @@ var Blocks = function() {
     var block_img = new Image();
     block_img.src = 'img/snow-block.png';
 
+    var block_img_broken = new Image();
+    block_img_broken.src = 'img/snow-block-broken.png';
+
     this.init = function() {
         container = new createjs.Container();
         container.z = 15;
@@ -20,7 +23,22 @@ var Blocks = function() {
         mods.floor.add_event_listener('dragstop', on_block_dragstop);
 
         mods.snowballs.add_hittable(function(ball) {
-            return inter.hit_test(ball.x, ball.y);
+            for (var i in container.children) {
+                var block = container.children[i];
+                var pt = container.localToLocal(ball.x, ball.y, block);
+
+                if (block.hitTest(pt.x, pt.y)) {
+                    block.hit_count++;
+
+                    if (block.hit_count === 1) {
+                        block.image = block_img_broken;
+                    } else if (block.hit_count === 2) {
+                        break_block(block);
+                    }
+
+                    return true;
+                }
+            }
         });
     };
 
@@ -43,11 +61,7 @@ var Blocks = function() {
         block.on('pressup', on_block_dragstop);
         block.on('click', function(e) {
             if (core.mouse_button === 'right') { return; }
-            block.supports.forEach(function(b) {
-                b.collapse_in = 0;
-            });
-
-            container.removeChild(block);
+            break_block(block);
         });
 
         block.unsupport = function(t) {
@@ -61,8 +75,18 @@ var Blocks = function() {
 
         block.supports = [];
         block.collapse_in = -1;
+        block.hit_count = 0;
 
         return block;
+    }
+
+    function break_block(block) {
+        block.supports.forEach(function(b) {
+            b.collapse_in = 0;
+        });
+
+        container.removeChild(block);
+
     }
 
     var first_drag = true;
@@ -99,16 +123,6 @@ var Blocks = function() {
         dragging.x = pos.x;
         dragging.y = pos.y;
     }
-
-    inter.hit_test = function(x, y) {
-        for (var i in container.children) {
-            var block = container.children[i];
-            var pt = container.localToLocal(x, y, block);
-            if (block.hitTest(pt.x, pt.y)) return true;
-        }
-    };
-
-    this.get_interface = function() { return inter; };
 
     this.tick = function(t) {
         container.children.forEach(function(block) {
