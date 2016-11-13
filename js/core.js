@@ -79,16 +79,18 @@ var core = new (function() {
     };
 
     var interface_proto = {
-        add_event_listener: function(event, fn) {
+        add_event_listener: function(event, fn, callee) {
             this.event_listeners[event] = this.event_listeners[event] || [];
 
+            if (callee) fn = fn.bind(callee);
             this.event_listeners[event].push(fn);
         },
         fire_event: function(event, args) {
             args.push(event);
-            this.event_listeners[event].forEach(function(fn) {
-                fn.apply(undefined, args);
-            });
+            var forevent = this.event_listeners[event];
+            if (forevent) for (var i in forevent) {
+                forevent[i].apply(undefined, args);
+            }
         }
     };
 
