@@ -78,9 +78,10 @@ var Blocks = function() {
                             return;
                     }
 
-                    if (block.y + (block.scaleY * block.image.height) >= b.y) {
+                    var btop = b.y - b.scaleY * b.regY;
+                    if (bottom >= btop) {
                         block.falling = false;
-                        block.y = b.y - (block.scaleY * block.image.height);
+                        block.y = btop - block.scaleY * block.regY;
                     }
                 });
             }
