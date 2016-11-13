@@ -3,7 +3,7 @@ var Peppermints = function() {
 
     var peppermint_counter = 0;
 
-    var initial_wait = 100;
+    var initial_wait = 20;
     var to_wait = initial_wait;
 
     var fire_event;

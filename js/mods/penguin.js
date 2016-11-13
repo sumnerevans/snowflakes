@@ -44,16 +44,17 @@ var Penguin = function () {
     this.post_init = function () {
         mods.peppermints.add_event_listener('pop', create_penguin);
 
-        mods.snowballs.add_event_listener('check_hit', function(ball, send) {
+        mods.snowballs.add_hittable(function(ball) {
             for (var i in container.children) {
                 var pen = container.children[i];
 
                 var pt = container.localToLocal(ball.x, ball.y, pen);
                 if(pen.hitTest(pt.x, pt.y)) {
-                    console.log('ouch!');
-                    return send(pen);
+                    pen.speed *= Math.sign(ball.speed.dx) ^ Math.sign(pen.speed);
+                    return true;
                 }
             }
+            return false;
         });
     };
 
