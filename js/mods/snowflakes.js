@@ -63,7 +63,7 @@ var Snowflakes = function() {
         bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
-            fire_event('click', [event, bitmap, snowflake_counter]);
+            fire_event('pop', [event, bitmap, snowflake_counter]);
         });
 
         return bitmap;
