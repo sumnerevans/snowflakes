@@ -5,6 +5,7 @@ var Penguin = function () {
 
     var tallness;
     var scale;
+    var fire_event;
 
     this.init = function () {
         container = new createjs.Container();
@@ -33,6 +34,10 @@ var Penguin = function () {
             + this.regY * scale;
         };
         pen.recalc();
+
+        pen.on('pressmove', on_drag);
+        pen.on('pressup', on_drag_stop);
+
         container.addChild(pen);
     }
 
@@ -82,6 +87,17 @@ var Penguin = function () {
     this.get_interface = function() {
         return {};
     };
+
+    this.set_event_handle = function(fire) { fire_event = fire; };
+
+    function on_drag() {
+        fire_event('drag', Array.prototype.slice.call(arguments));
+    }
+
+    function on_drag_stop() {
+        fire_event('dragstop', Array.prototype.slice.call(arguments));
+    }
+
 };
 
 core.add_feature('penguin', new Penguin());

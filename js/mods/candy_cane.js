@@ -1,8 +1,7 @@
 var CandyCane = function() {
-    var candy_canes = [];
     var container;
-    var dragging;
     var current_t;
+    var drag_start;
 
     var candy_cane_img = new Image();
     candy_cane_img.src = 'img/candycane.png';
@@ -15,46 +14,72 @@ var CandyCane = function() {
     };
 
     this.post_init = function() {
-        mods.blocks.add_event_listener('block_created', on_block_created);
+        mods.penguin.add_event_listener('drag', on_penguin_drag);
+        mods.penguin.add_event_listener('dragstop', on_penguin_dragstop);
     };
 
-    function create_new_candy_cane() {
+    function create_candy_cane(settings) {
         var candy_cane = new createjs.Bitmap();
         candy_cane.image = candy_cane_img;
         candy_cane.tickEnabled = false;
 
-        var scale = 0.1;
+        candy_cane.size = 7;
+        var scale = candy_cane.size / candy_cane_img.width;
+        candy_cane.x = settings.x;
+        candy_cane.y = settings.y;
         candy_cane.scaleX = candy_cane.scaleY = scale;
-        candy_cane.regX = candy_cane.image.width / 2;
-        candy_cane.regY = candy_cane.image.height / 2;
-        candy_cane.size = candy_cane.image.height * scale;
-        candy_cane.start_fall = current_t;
-        candy_cane.falling = true;
-        candy_cane.x = core.rand_float(transform.provide.minx, transform.provide.maxx);
-        candy_cane.y = transform.provide.miny - candy_cane.image.height * scale;
+        candy_cane.regX = candy_cane_img.width / 2;
+        candy_cane.regY = candy_cane_img.height / 2;
+
+        candy_cane.speed = {
+            dx: settings.dx,
+            dy: settings.dy,
+            dtheta: core.rand_float(-5, 5),
+        };
 
         return candy_cane;
     }
 
-    function on_block_created(block, num_blocks) {
-        if (num_blocks % 2 === 0 && num_blocks > 1) {
-            candy_canes.push(create_new_candy_cane());
+    function on_penguin_drag(event) {
+        if (!drag_start) {
+            drag_start = transform.apply(event.rawX, event.rawY);
+        }
+    }
+
+    function on_penguin_dragstop(event) {
+        if (drag_start) {
+            var drag_end = transform.apply(event.rawX, event.rawY);
+            var dx = drag_end.x - drag_start.x;
+            var dy = drag_end.y - drag_start.y;
+            var mag = Math.sqrt(dx * dx + dy * dy);
+            dx /= mag;
+            dy /= mag;
+
+            var speed = Math.min(mag / 10, 3);
+            dx *= speed;
+            dy *= speed;
+
+            container.addChild(create_candy_cane({
+                x: drag_end.x,
+                y: drag_end.y,
+                dx: dx,
+                dy: dy,
+            }));
+
+            drag_start = undefined;
         }
     }
 
     this.tick = function(t) {
-        candy_canes.forEach(function(candy_cane) {
-            if (candy_cane.falling) {
-                candy_cane.y -= 0.0098 * (t - candy_cane.start_fall);
-            }
+        for (var i in container.children) {
+            var item = container.children[i];
 
-            var bottom = candy_cane.y + candy_cane.scaleY * candy_cane.regY;
-            if (bottom > transform.provide.maxy - mods.floor.height && mods.floor.hit_test(candy_cane.x, bottom)) {
-                candy_cane.falling = false;
-            }
-        });
-
-        current_t = t;
+            // Move the mint
+            item.speed.dy += 0.1;
+            item.y += item.speed.dy;
+            item.x += item.speed.dx;
+            item.rotation += item.speed.dtheta;
+        }
     };
 };
 
