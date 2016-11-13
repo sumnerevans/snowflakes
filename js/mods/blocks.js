@@ -15,14 +15,13 @@ var Blocks = function() {
     };
 
     this.post_init = function() {
-       mods.floor.add_event_listener('drag', on_floor_drag);
-       mods.floor.add_event_listener('dragstop', on_floor_dragstop);
+        mods.floor.add_event_listener('drag', on_block_drag);
+        mods.floor.add_event_listener('dragstop', on_block_dragstop);
     };
 
     function create_block(x, y) {
         var block = new createjs.Bitmap();
         block.image = block_img;
-        block.dragging = true;
         block.tickEnabled = false;
 
         var scale = core.rand_float(0.09, 0.11);
@@ -32,21 +31,27 @@ var Blocks = function() {
         block.regY = block.image.height / 2;
         block.size = block.image.heigth * scale;
 
+        block.on('pressmove', function() {
+            dragging = this;
+            on_block_drag.apply(undefined, arguments);
+        });
+        block.on('pressup', on_block_dragstop);
+
         return block;
     }
 
-    function on_floor_drag(event) {
+    function on_block_drag(event) {
         if (!dragging) {
             dragging = create_block(event.rawX, event.rawY);
             blocks.push(dragging);
             container.addChild(dragging);
         }
 
+        console.log(arguments);
         move_block(event.rawX, event.rawY);
     }
 
-    function on_floor_dragstop(event) {
-        dragging.dragging = false;
+    function on_block_dragstop(event) {
         dragging.start_fall = current_t;
         dragging.start_fall_y = dragging.y;
         dragging.falling = true;
@@ -61,7 +66,7 @@ var Blocks = function() {
 
     this.tick = function(t) {
         blocks.forEach(function(block) {
-            if (!block.dragging && block.falling) {
+            if (block.falling) {
                 block.y += 0.0098 * (t - block.start_fall);
 
                 // Stop falling when it hits the gound

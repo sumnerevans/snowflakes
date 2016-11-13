@@ -39,31 +39,28 @@ var Penguin = function () {
 
         if (pause_motion > 0 || !vis) {
             pause_motion--;
-        } else {
+        }
+        else {
             if (t % 10 === 0) {
-                var randDiff = core.rand(-10, 10);
-
-                switch(true) {
-                    case randDiff < 0:
-                        speed -= 0.02;
-                        break;
-                    case randDiff === 0:
-                        speed /= 2;
-                        break;
-                    case randDiff > 0:
-                        speed += 0.02;
-                        break;
-                }
-
-                speed *= Math.abs(speed) > 0.1 ? 0.9 : 1.2;
+                if (Math.random() < 0.05) speed /= 2;
+                else speed += (speed < 0)? -0.02:0.02;
+                speed *= Math.abs(speed) > 0.1 ? 0.9 : 1.1;
             }
-
+            /* Allow direction changes inside our snow bank
+             * range at certain multiples of our position */
+            var p = (image_front.x
+                - transform.provide.minx
+                - (0.12 * transform.provide.sizex))
+                / (0.76 * transform.provide.sizex);
+            if (p > 0 && p < 1 && Math.floor(1000*p) % 150 == 0) {
+                /* Do a bernoulli trial with probability 0.3 of success
+                 * to change directions */
+                if (Math.random() < 0.3) speed *= -0.25;
+            }
             image_front.x += speed;
 
             // Don't let Tux get away too far
-            if (image_front.x < -20 || image_front.x > transform.provide.maxx + 20) {
-                 speed *= -1;
-            }
+            if ((p > 1 && speed > 0) || (p < 0 && speed < 0)) speed *= -0.25;
         }
     };
 
