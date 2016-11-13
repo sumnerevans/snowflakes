@@ -8,13 +8,23 @@ var Penguin = function () {
     var pause_motion = 0;
     var t_offset = 0;
     var t_current = 0;
+    var vis = false;
 
     this.init = function () {
         container = new createjs.Container();
         this.resize();
-        container.addChild(image_front);
         container.z = 10;
+
         stage.addChild(container);
+    };
+
+    this.post_init = function () {
+        mods.peppermints.add_event_listener('pop', function() {
+            if (!vis) {
+                vis = true;
+                container.addChild(image_front);
+            }
+        });
     };
 
     this.post_init = function() {
@@ -46,6 +56,10 @@ var Penguin = function () {
         }
 
         t_current = t;
+    };
+
+    this.get_interface = function() {
+        return {};
     };
 
     function on_snowflake_pop(event, flake, snowflake_counter) {
