@@ -47,7 +47,6 @@ var Blocks = function() {
             container.addChild(dragging);
         }
 
-        console.log(arguments);
         move_block(event.rawX, event.rawY);
     }
 
