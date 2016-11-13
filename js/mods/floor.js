@@ -16,6 +16,12 @@ var Floor = function() {
         stage.addChild(container);
     };
 
+    this.post_init = function() {
+        mods.snowballs.add_hittable(function(ball) {
+            return inter.hit_test(ball.x, ball.y);
+        });
+    }
+
     this.resize = function() {
         bitmap.x = transform.provide.minx;
 
