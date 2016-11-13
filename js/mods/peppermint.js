@@ -33,7 +33,7 @@ var Peppermints = function() {
         var scale = 10 / image.width;
 
         bitmap.size = image.height * scale;
-        bitmap.x = core.rand(transform.provide.minx, transform.provide.sizex);
+        bitmap.x = core.rand(transform.provide.minx, transform.provide.maxx);
         bitmap.y = transform.provide.miny - bitmap.size;
         bitmap.scaleX = bitmap.scaleY = scale;
         bitmap.regX = image.width / 2;
