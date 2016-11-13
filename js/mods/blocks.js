@@ -48,6 +48,7 @@ var Blocks = function() {
     function on_floor_dragstop(event) {
         dragging.dragging = false;
         dragging.start_fall = current_t;
+        dragging.start_fall_y = dragging.y;
         dragging.falling = true;
         dragging = null;
     }
@@ -62,17 +63,31 @@ var Blocks = function() {
         blocks.forEach(function(block) {
             if (!block.dragging && block.falling) {
                 block.y += 0.0098 * (t - block.start_fall);
-            }
 
-            // Stop falling when it hits the gound
-            if (block.falling && block.y + (block.scaleY * block.image.height) >= transform.provide.sizey - mods.floor.height) {
-                block.falling = false;
-            }
+                // Stop falling when it hits the gound
+                if (block.y + (block.scaleY * block.image.height) >= transform.provide.sizey - mods.floor.height) {
+                    block.falling = false;
+                    block.y = (transform.provide.sizey - mods.floor.height) - (block.scaleY * block.image.height) / 1.5;
+                }
 
-            // TODO: collision detection
+                blocks.forEach(function(b) {
+                    if (b === block || b.falling ||
+                        b.x + b.image.width * b.scaleX < block.x ||
+                        b.x > block.x + block.image.width * block.scaleX ||
+                        block.start_fall_y + (block.scaleY * block.image.height)> b.y) {
+                            return;
+                    }
+
+                    if (block.y + (block.scaleY * block.image.height) >= b.y) {
+                        block.falling = false;
+                        block.y = b.y - (block.scaleY * block.image.height);
+                    }
+                });
+            }
         });
         current_t = t;
     };
+
 };
 
 core.add_feature('blocks', new Blocks());
