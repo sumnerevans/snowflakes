@@ -9,6 +9,8 @@ var UserCustomize = function() {
         return color;
     }
 
+    this.name = "user_customize";
+
     this.key_event = function(key, state) {
         if (state) {
             switch(key.key) {

@@ -5,11 +5,15 @@ var Snowflakes = function() {
 
     var snowflake_counter = 0;
 
+    var pop_callbacks = [];
+
     for (var i = 0; i < 18; i++) {
         var image = new Image();
         image.src = 'img/flake{0}.png'.format(i);
         images.push(image);
     }
+
+    this.name = "snowflakes";
 
     this.init = function() {
         containers.push(new createjs.Container());
@@ -57,9 +61,12 @@ var Snowflakes = function() {
         init_snowflake(bitmap);
         bitmap.tickEnabled = false;
 
-        bitmap.addEventListener('click', function() {
+        bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
+            for (var i in pop_callbacks) {
+                pop_callbacks[i](event, bitmap, snowflake_counter);
+            }
         });
 
         return bitmap;
@@ -99,6 +106,13 @@ var Snowflakes = function() {
         }
     };
 
+    this.expose = {
+        // callback takes: click event object, snowflake bitmap, poped count
+        add_pop_listener: function (func) {
+            pop_callbacks.push(func);
+        },
+        get_pop_count: function() { return snowflake_counter; }
+    }
 };
 
 core.add_feature(new Snowflakes());

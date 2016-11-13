@@ -3,9 +3,10 @@ var Penguin = function () {
     image_front.tickEnabled = false;
     image_front.regX = 277;
     image_front.regY = 600;
-    var t = 0;
 
     var tallness;
+
+    this.name = "penguin";
 
     this.init = function () {
         container = new createjs.Container();
@@ -23,13 +24,13 @@ var Penguin = function () {
 
         tallness = scale * image_front.image.height;
         image_front.y = transform.provide.maxy
-                        - stage.floor_height * .2
+                        - mods.floor.height * .2
                         - tallness
                         + image_front.regY * scale;
     };
 
-    this.tick = function () {
-        image_front.rotation = 6*Math.sin(0.4*t);
+    this.tick = function (t) {
+        image_front.rotation = 6*Math.sin(0.013*t);
         t += 1;
     };
 };

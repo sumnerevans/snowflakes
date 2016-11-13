@@ -1,10 +1,13 @@
 var stage;
 var transform = new Transform(0, 100, 0, 100, .5, 1, 1);
+var mods = {};
 
 var core = new (function() {
 
     var features = [];
     var initialized = false;
+
+    var start = Date.now();
 
     function do_resize() {
         stage.canvas.width = window.innerWidth;
@@ -25,6 +28,13 @@ var core = new (function() {
         });
     }
 
+    function call_feature(func, args) {
+        for (var i in features) {
+            var feature = features[i];
+            if (feature[func]) feature[func].apply(feature, args);
+        }
+    }
+
     document.onkeydown = key_down;
     document.onkeyup = key_up;
 
@@ -33,9 +43,7 @@ var core = new (function() {
 
         do_resize();
 
-        features.forEach(function(feature) {
-            if (feature.resize) feature.resize(transform, old);
-        });
+        call_feature("resize", [transform, old]);
 
         stage.update();
     };
@@ -46,9 +54,8 @@ var core = new (function() {
             return;
         }
 
-        features.forEach(function(feature) {
-            if (feature.tick) feature.tick();
-        });
+        call_feature("tick", [Date.now() - start]);
+
         stage.update();
     };
 
@@ -62,9 +69,7 @@ var core = new (function() {
 
         do_resize();
 
-        features.forEach(function(feature) {
-            if (feature.init) feature.init();
-        });
+        call_feature("init");
 
         stage.sortChildren(function(a, b) {
             if (a.z > b.z) { return 1; }
@@ -73,10 +78,13 @@ var core = new (function() {
         });
 
         initialized = true;
+
+        call_feature("post_init");
     };
 
     this.add_feature = function(feature) {
         features.push(feature);
+        if (feature.expose) mods[feature.name] = feature.expose;
     };
 
     this.rand = function(min, max) {
@@ -89,5 +97,5 @@ var core = new (function() {
 
     this.set_background = function(back) {
         if (back.color) stage.canvas.style.backgroundColor = back.color;
-    }
+    };
 })();
