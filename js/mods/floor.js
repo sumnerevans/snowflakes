@@ -1,12 +1,9 @@
 var Floor = function() {
-    this.extends = ModBase;
-    this.name = 'floor';
-
     var container;
     var bitmap = new createjs.Bitmap("img/floor.png");
     bitmap.tickEnabled = false;
 
-    this.name = "floor";
+    var inter = {};
 
     this.init = function() {
         container = new createjs.Container();
@@ -27,16 +24,14 @@ var Floor = function() {
 
         bitmap.y = transform.provide.maxy - bitmap.image.height * scale;
 
-        this.expose.height = bitmap.image.height * scale;
+        inter.height = bitmap.image.height * scale;
     };
+
+    this.get_interface = function() { return inter; };
 
     function on_drag() {
-        this.fire_event('drag', ['awesome']);
+        mod.floor.fire_event('drag', ['awesome']);
     };
-
-    this.expose = {};
 };
 
-Floor.prototype = ModBase;
-
-core.add_feature(new Floor());
+core.add_feature('floor', new Floor());

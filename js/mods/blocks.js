@@ -1,6 +1,4 @@
 var Blocks = function() {
-    this.name = 'blocks';
-
     var blocks = [];
     var container;
     var img = new Image();
@@ -11,9 +9,11 @@ var Blocks = function() {
         container.z = 15;
 
         stage.addChild(container);
-
-        core.get_feature('floor').add_event_listener('drag', on_floor_drag);
     };
+
+    this.post_init = function() {
+        mods.floor.add_event_listener('drag', on_floor_drag);
+    }
 
     function create_block() {
         var block = new createjs.Bitmap();
@@ -25,9 +25,6 @@ var Blocks = function() {
     function on_floor_drag() {
         console.log(arguments);
     }
-
 };
 
-Blocks.prototype = ModBase;
-
-core.add_feature(new Blocks());
+core.add_feature('blocks', new Blocks());

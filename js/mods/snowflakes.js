@@ -1,6 +1,4 @@
 var Snowflakes = function() {
-    this.name = 'snowflakes';
-
     var containers = [];
     var images = [];
 
@@ -11,8 +9,6 @@ var Snowflakes = function() {
         image.src = 'img/flake{0}.png'.format(i);
         images.push(image);
     }
-
-    this.name = "snowflakes";
 
     this.init = function() {
         containers.push(new createjs.Container());
@@ -55,16 +51,16 @@ var Snowflakes = function() {
     };
 
     function create_snowflake() {
-
         var bitmap = new createjs.Bitmap();
 
         init_snowflake(bitmap);
         bitmap.tickEnabled = false;
 
+        var this_ = this;
         bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
-            this.fire_event('click', [event, bitmap, snowflake_counter]);
+            this_.expose.fire_event('click', [event, bitmap, snowflake_counter]);
         });
 
         return bitmap;
@@ -104,11 +100,11 @@ var Snowflakes = function() {
         }
     };
 
-    this.expose = {
-        get_pop_count: function() { return snowflake_counter; }
-    };
+    this.get_interface = function() {
+        return {
+            get_pop_count: function() { return snowflake_counter; }
+        };
+    }
 };
 
-Snowflakes.prototype = ModBase;
-
-core.add_feature(new Snowflakes());
+core.add_feature('snowflakes', new Snowflakes());

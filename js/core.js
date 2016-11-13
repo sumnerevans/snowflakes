@@ -78,27 +78,29 @@ var core = new (function() {
         call_feature("post_init");
     };
 
-    var feature_num = 0;
-    this.add_feature = function(feature) {
-        features[feature.name || feature_num.toString()] = feature;
-        if (feature.expose) {
-            feature.expose.feature = feature;
-            mods[feature.name] = feature.expose;
+    var interface_proto = {
+        add_event_listener: function(event, fn) {
+            this.event_listeners[event] = this.event_listeners[event] || [];
+
+            this.event_listeners[event].push(fn);
+        },
+        fire_event: function(event, args) {
+            args.push(event);
+            this.event_listeners[event].forEach(function(fn) {
+                fn.apply(undefined, args);
+            });
         }
+    }
 
-        feature_num++;
-    };
+    this.add_feature = function(name, feature) {
+        features[name] = feature;
 
-    this.get_feature = function(feature_name) {
-        var return_feature = null;
-        $.each(features, function(name, feature) {
-            if (name === feature_name) {
-                return_feature = feature;
-                return false;
-            }
-        });
-
-        return return_feature;
+        var inter = feature.get_interface ? (feature.get_interface() || {}) : {};
+        inter.name = name;
+        inter.feature = feature;
+        inter.event_listeners = {};
+        Object.setPrototypeOf(inter, interface_proto);
+        mods[name] = inter;
     };
 
     this.rand = function(min, max) {
