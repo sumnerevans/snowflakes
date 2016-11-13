@@ -3,7 +3,7 @@ var transform = new Transform(0, 100, 0, 100, .5, 1, 1);
 
 var core = new (function() {
 
-    var features = [];
+    var features = {};
     var initialized = false;
 
     function do_resize() {
@@ -14,13 +14,13 @@ var core = new (function() {
     }
 
     function key_down(key) {
-        features.forEach(function(feature) {
+        $.each(features, function(name, feature) {
             if (feature.key_event) feature.key_event(key, true);
         });
     }
 
     function key_up(key) {
-        features.forEach(function(feature) {
+        $.each(features, function(name, feature) {
             if (feature.key_event) feature.key_event(key, false);
         });
     }
@@ -33,7 +33,7 @@ var core = new (function() {
 
         do_resize();
 
-        features.forEach(function(feature) {
+        $.each(features, function(name, feature) {
             if (feature.resize) feature.resize(transform, old);
         });
 
@@ -46,7 +46,7 @@ var core = new (function() {
             return;
         }
 
-        features.forEach(function(feature) {
+        $.each(features, function(name, feature) {
             if (feature.tick) feature.tick();
         });
         stage.update();
@@ -62,7 +62,7 @@ var core = new (function() {
 
         do_resize();
 
-        features.forEach(function(feature) {
+        $.each(features, function(name, feature) {
             if (feature.init) feature.init();
         });
 
@@ -75,8 +75,22 @@ var core = new (function() {
         initialized = true;
     };
 
+    var feature_num = 0;
     this.add_feature = function(feature) {
-        features.push(feature);
+        features[feature.name || feature_num.toString()] = feature;
+        feature_num++;
+    };
+
+    this.get_feature = function(feature_name) {
+        var return_feature = null;
+        $.each(features, function(name, feature) {
+            if (name === feature_name) {
+                return_feature = feature;
+                return false;
+            }
+        });
+
+        return return_feature;
     };
 
     this.rand = function(min, max) {
@@ -89,5 +103,5 @@ var core = new (function() {
 
     this.set_background = function(back) {
         if (back.color) stage.canvas.style.backgroundColor = back.color;
-    }
+    };
 })();

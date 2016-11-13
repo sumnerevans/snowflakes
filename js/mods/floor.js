@@ -1,4 +1,7 @@
 var Floor = function() {
+    this.extends = ModBase;
+    this.name = 'floor';
+
     var container;
     var bitmap = new createjs.Bitmap("img/floor.png");
     bitmap.tickEnabled = false;
@@ -24,6 +27,12 @@ var Floor = function() {
 
         stage.floor_height = bitmap.image.height * scale;
     };
+
+    function on_drag() {
+        this.fire_event('drag', ['awesome']);
+    };
 };
+
+Floor.prototype = ModBase;
 
 core.add_feature(new Floor());

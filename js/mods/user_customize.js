@@ -1,4 +1,6 @@
 var UserCustomize = function() {
+    this.name = 'usercustomize';
+
     var hex = "0123456789ABCDEF"
 
     function rand_color() {
@@ -22,5 +24,7 @@ var UserCustomize = function() {
         }
     };
 };
+
+UserCustomize.prototype = ModBase;
 
 core.add_feature(new UserCustomize());

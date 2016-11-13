@@ -1,4 +1,5 @@
 var Snowflakes = function() {
+    this.name = 'snowflakes';
 
     var containers = [];
     var images = [];
@@ -98,7 +99,8 @@ var Snowflakes = function() {
             });
         }
     };
-
 };
+
+Snowflakes.prototype = ModBase;
 
 core.add_feature(new Snowflakes());

@@ -1,4 +1,6 @@
 var Penguin = function () {
+    this.name = 'penguin';
+
     var image_front = new createjs.Bitmap('img/tux.png');
     image_front.tickEnabled = false;
     image_front.regX = 277;
@@ -33,5 +35,7 @@ var Penguin = function () {
         t += 1;
     };
 };
+
+Penguin.prototype = ModBase;
 
 core.add_feature(new Penguin());
