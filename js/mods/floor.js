@@ -4,6 +4,7 @@ var Floor = function() {
     bitmap.tickEnabled = false;
 
     var inter = {};
+    var fire_event;
 
     this.init = function() {
         container = new createjs.Container();
@@ -29,8 +30,10 @@ var Floor = function() {
 
     this.get_interface = function() { return inter; };
 
+    this.set_event_handle = function(fire) { fire_event = fire; };
+
     function on_drag() {
-        mods.floor.fire_event('drag', ['awesome']);
+        fire_event('drag', ['awesome']);
     };
 };
 

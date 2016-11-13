@@ -4,6 +4,8 @@ var Snowflakes = function() {
 
     var snowflake_counter = 0;
 
+    var fire_event;
+
     for (var i = 0; i < 18; i++) {
         var image = new Image();
         image.src = 'img/flake{0}.png'.format(i);
@@ -27,6 +29,8 @@ var Snowflakes = function() {
             stage.addChild(containers[i]);
         }
     };
+
+    this.set_event_handle = function(fire) { fire_event = fire; };
 
     function init_snowflake(bitmap) {
 
@@ -59,7 +63,7 @@ var Snowflakes = function() {
         bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
-            mods.snowflakes.fire_event('click', [event, bitmap, snowflake_counter]);
+            fire_event('click', [event, bitmap, snowflake_counter]);
         });
 
         return bitmap;
