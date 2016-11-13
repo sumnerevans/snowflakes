@@ -6,9 +6,8 @@ var Penguin = function () {
 
     var tallness;
     var pause_motion = 0;
-    var t_offset = 0;
-    var t_current = 0;
     var vis = false;
+    var speed = 0;
 
     this.init = function () {
         container = new createjs.Container();
@@ -19,12 +18,7 @@ var Penguin = function () {
     };
 
     this.post_init = function () {
-        mods.peppermints.add_event_listener('pop', function() {
-            if (!vis) {
-                vis = true;
-                container.addChild(image_front);
-            }
-        });
+        mods.peppermints.add_event_listener('pop', on_snowflake_pop);
     };
 
     this.post_init = function() {
@@ -47,15 +41,34 @@ var Penguin = function () {
     this.tick = function (t) {
         image_front.rotation = 6 * Math.sin(0.013 * t);
 
-        if (pause_motion > 0) {
-            var dt = t - t_current;
+        if (pause_motion > 0 || !vis) {
             pause_motion--;
-            t_offset += dt;
         } else {
-            image_front.x = 20 + (50 * Math.sin(0.0001 * (t - t_offset)));
-        }
+            if (t % 10 === 0) {
+                var randDiff = core.rand(-10, 10);
 
-        t_current = t;
+                switch(true) {
+                    case randDiff < 0:
+                        speed -= 0.02;
+                        break;
+                    case randDiff === 0:
+                        speed /= 2;
+                        break;
+                    case randDiff > 0:
+                        speed += 0.02;
+                        break;
+                }
+
+                speed *= Math.abs(speed) > 0.1 ? 0.9 : 1.2;
+            }
+
+            image_front.x += speed;
+
+            // Don't let Tux get away too far
+            if (image_front.x < -20 || image_front.x > transform.provide.maxx + 20) {
+                 speed *= -1;
+            }
+        }
     };
 
     this.get_interface = function() {
@@ -63,6 +76,13 @@ var Penguin = function () {
     };
 
     function on_snowflake_pop(event, flake, snowflake_counter) {
+        if (!vis) {
+            vis = true;
+            container.addChild(image_front);
+            speed = 0.2;
+            image_front.x = -15;
+        }
+
         if (snowflake_counter % 12 === 0 && pause_motion <= 0) {
             pause_motion = 200;
         }
