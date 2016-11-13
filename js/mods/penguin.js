@@ -21,10 +21,6 @@ var Penguin = function () {
         mods.peppermints.add_event_listener('pop', on_snowflake_pop);
     };
 
-    this.post_init = function() {
-        mods.snowflakes.add_event_listener('pop', on_snowflake_pop);
-    };
-
     this.resize = function () {
         var scale = 13 / image_front.image.width;
         image_front.x = transform.provide.minx + transform.provide.sizex * .5;
