@@ -54,9 +54,9 @@ var Blocks = function() {
     }
 
     function move_block(rawX, rawY) {
-        dragging.x = (rawX / transform.canvas.width) * transform.provide.sizex;
-        dragging.y = (rawY / transform.canvas.height) * transform.provide.sizey -
-            dragging.image.height * 2 * dragging.scaleY;
+        var pos = transform.apply(rawX, rawY);
+        dragging.x = pos.x;
+        dragging.y = pos.y;
     }
 
     this.tick = function(t) {

@@ -99,6 +99,13 @@ var Snowflakes = function() {
                 x *= current.provide.sizex;
                 x += current.provide.minx;
                 flake.x = x;
+
+                var y = flake.y;
+                y -= old.provide.miny;
+                y /= old.provide.sizey;
+                y *= current.provide.sizey;
+                y += current.provide.miny;
+                flake.y = y;
             });
         }
     };
