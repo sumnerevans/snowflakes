@@ -8,7 +8,7 @@ var Snowballs = function() {
     var snowball_img = new Image();
     snowball_img.src = 'img/snowball.png';
 
-    var current_drag;
+    var peppermint_counter = 0;
 
     /*
     var bigball = new Image();
@@ -82,6 +82,10 @@ var Snowballs = function() {
     this.post_init = function() {
         mods.floor.add_event_listener('drag', on_drag);
         mods.floor.add_event_listener('dragstop', on_dragstop);
+
+        mods.snowballs.add_event_listener('check_hit', function(item, send) {
+            if(mods.floor.hit_test(item.x, item.y)) return send("floor");
+        });
     };
 
     this.set_event_handle = function(fire) { fire_event = fire; };
@@ -98,12 +102,12 @@ var Snowballs = function() {
 
             var radius = item.size / 2;
 
-            // If the mint has reached the bottom of the screen, replace
-            // it with one at the top.
-            if (item.y > transform.provide.maxy - mods.floor.height * .2) {
+            fire_event('check_hit', [item, function(cause) {
                 container.removeChild(item);
-                fire_event('hit', [item]);
-            }
+                fire_event('hit', [item, cause]);
+                return true;
+            }]);
+
             if (item.x - radius > transform.provide.maxx || item.x + radius < transform.provide.minx || item.y - radius > transform.provide.maxy) {
                 container.removeChild(item);
             }

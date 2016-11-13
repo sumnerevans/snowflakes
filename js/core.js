@@ -101,7 +101,7 @@ var core = new (function() {
 
             var forevent = event_listeners[event];
             if (forevent) for (var i in forevent) {
-                forevent[i].apply(undefined, args);
+                if (forevent[i].apply(undefined, args)) break;
             }
         });
     };
