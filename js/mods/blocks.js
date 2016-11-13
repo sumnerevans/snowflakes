@@ -15,8 +15,8 @@ var Blocks = function() {
     };
 
     this.post_init = function() {
-        mods.floor.add_event_listener('drag', on_floor_drag);
-        mods.floor.add_event_listener('dragstop', on_floor_dragstop);
+        mods.floor.add_event_listener('drag', on_block_drag);
+        mods.floor.add_event_listener('dragstop', on_block_dragstop);
     };
 
     function create_block(x, y) {
@@ -35,7 +35,7 @@ var Blocks = function() {
         return block;
     }
 
-    function on_floor_drag(event) {
+    function on_block_drag(event) {
         if (!dragging) {
             dragging = create_block(event.rawX, event.rawY);
             blocks.push(dragging);
@@ -45,11 +45,20 @@ var Blocks = function() {
         move_block(event.rawX, event.rawY);
     }
 
-    function on_floor_dragstop(event) {
+    function on_block_dragstop(event) {
         dragging.dragging = false;
         dragging.start_fall = current_t;
         dragging.start_fall_y = dragging.y;
         dragging.falling = true;
+
+        dragging.on('pressmove', function(e) {
+            dragging = e.currentTarget;
+            dragging.dragging = true;
+            dragging.falling = false;
+            on_block_drag(arguments);
+        });
+        dragging.on('pressup', on_block_dragstop);
+
         dragging = null;
     }
 
