@@ -30,7 +30,7 @@ var Floor = function() {
     this.get_interface = function() { return inter; };
 
     function on_drag() {
-        mod.floor.fire_event('drag', ['awesome']);
+        mods.floor.fire_event('drag', ['awesome']);
     };
 };
 

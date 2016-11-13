@@ -56,11 +56,10 @@ var Snowflakes = function() {
         init_snowflake(bitmap);
         bitmap.tickEnabled = false;
 
-        var this_ = this;
         bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
-            this_.expose.fire_event('click', [event, bitmap, snowflake_counter]);
+            mods.snowflakes.fire_event('click', [event, bitmap, snowflake_counter]);
         });
 
         return bitmap;
