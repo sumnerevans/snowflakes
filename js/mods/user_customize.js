@@ -1,7 +1,7 @@
 var UserCustomize = function() {
     this.name = 'usercustomize';
 
-    var hex = "0123456789ABCDEF"
+    var hex = "0123456789ABCDEF";
 
     function rand_color() {
         var color = "#";
@@ -10,6 +10,8 @@ var UserCustomize = function() {
         }
         return color;
     }
+
+    this.name = "user_customize";
 
     this.key_event = function(key, state) {
         if (state) {

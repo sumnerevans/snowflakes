@@ -12,6 +12,8 @@ var Snowflakes = function() {
         images.push(image);
     }
 
+    this.name = "snowflakes";
+
     this.init = function() {
         containers.push(new createjs.Container());
         containers.push(new createjs.Container());
@@ -55,12 +57,14 @@ var Snowflakes = function() {
     function create_snowflake() {
 
         var bitmap = new createjs.Bitmap();
+
         init_snowflake(bitmap);
         bitmap.tickEnabled = false;
 
-        bitmap.addEventListener('click', function() {
+        bitmap.addEventListener('click', function(event) {
             snowflake_counter++;
             init_snowflake(bitmap);
+            this.fire_event('click', [event, bitmap, snowflake_counter]);
         });
 
         return bitmap;
@@ -98,6 +102,10 @@ var Snowflakes = function() {
                 flake.x = x;
             });
         }
+    };
+
+    this.expose = {
+        get_pop_count: function() { return snowflake_counter; }
     };
 };
 
