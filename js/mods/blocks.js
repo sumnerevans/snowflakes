@@ -30,12 +30,7 @@ var Blocks = function() {
                 if (block.hitTest(pt.x, pt.y)) {
                     block.hit_count++;
 
-                    if (block.hit_count === 1) {
-                        block.image = block_img_broken;
-                    } else if (block.hit_count === 2) {
-                        break_block(block);
-                    }
-
+                    break_block(block);
                     return true;
                 }
             }
@@ -81,12 +76,17 @@ var Blocks = function() {
     }
 
     function break_block(block) {
+        if (!block.broken) {
+            block.broken = true;
+            block.image = block_img_broken;
+            return;
+        }
+
         block.supports.forEach(function(b) {
             b.collapse_in = 0;
         });
 
         container.removeChild(block);
-
     }
 
     var first_drag = true;
