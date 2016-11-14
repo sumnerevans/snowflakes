@@ -38,6 +38,10 @@ var Penguin = function () {
         pen.on('pressmove', on_drag);
         pen.on('pressup', on_drag_stop);
 
+        pen.spawn_time = Date.now();
+        pen.disapear_in = core.rand(10, 60) * 1000;
+        pen.rot_offset = core.rand_float(0, 6.28);
+
         container.addChild(pen);
     }
 
@@ -68,10 +72,16 @@ var Penguin = function () {
         for (var i in container.children) {
             var pen = container.children[i];
 
-            pen.rotation = 6 * Math.sin(0.013 * t);
+            pen.rotation = 6 * Math.sin(0.013 * t + pen.rot_offset);
 
             if (pen.pause_motion > 0) {
                 pen.pause_motion--;
+            } else if (Date.now() - pen.spawn_time > pen.disapear_in) {
+                if (Math.abs(pen.speed) < 0.03) pen.speed = Math.sign(pen.speed) * 0.03;
+                pen.x += pen.speed;
+                if (pen.x - tallness > transform.provide.maxx || pen.x + tallness < transform.provide.minx) {
+                    container.removeChild(pen);
+                }
             } else {
                 if (t % 10 === 0) {
                     if (Math.random() < 0.05) pen.speed /= 2;
