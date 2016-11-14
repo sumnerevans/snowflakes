@@ -63,7 +63,10 @@ var Snowballs = function() {
             var drag_end = transform.apply(event.rawX, event.rawY);
             var dx = drag_end.x - drag_start.x;
             var dy = drag_end.y - drag_start.y;
+            drag_start = undefined;
             var mag = Math.sqrt(dx * dx + dy * dy);
+            if (mag < 0.0001) return;
+
             dx /= mag;
             dy /= mag;
 
@@ -72,7 +75,6 @@ var Snowballs = function() {
             dy *= speed;
 
             container.addChild(create_snowball(snowball_img, {x: drag_end.x, y: drag_end.y, dx: dx, dy: dy}));
-            drag_start = undefined;
         }
     }
 

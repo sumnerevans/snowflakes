@@ -55,6 +55,8 @@ var CandyCane = function() {
             var dx = drag_end.x - drag_start.x;
             var dy = drag_end.y - drag_start.y;
             var mag = Math.sqrt(dx * dx + dy * dy);
+            drag_start = undefined;
+            if (mag < 0.0001) return;
             dx /= mag;
             dy /= mag;
 
@@ -68,8 +70,6 @@ var CandyCane = function() {
                 dx: dx,
                 dy: dy,
             }));
-
-            drag_start = undefined;
         }
     }
 
