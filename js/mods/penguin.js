@@ -49,7 +49,7 @@ var Penguin = function () {
                 var pen = container.children[i];
 
                 var pt = container.localToLocal(ball.x, ball.y, pen);
-                if(pen.hitTest(pt.x, pt.y)) {
+                if (pen.hitTest(pt.x, pt.y)) {
                     pen.speed *= (Math.sign(ball.speed.dx) ^ Math.sign(pen.speed))? -1:1;
                     return true;
                 }

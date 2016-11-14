@@ -17,6 +17,10 @@ var Floor = function() {
     };
 
     this.post_init = function() {
+        mods.candycane.add_hittable(function(candy_cane) {
+            return inter.hit_test(candy_cane.x, candy_cane.y);
+        });
+
         mods.snowballs.add_hittable(function(ball) {
             return inter.hit_test(ball.x, ball.y);
         });

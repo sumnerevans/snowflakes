@@ -2,6 +2,9 @@ var CandyCane = function() {
     var container;
     var current_t;
     var drag_start;
+    var fire_event;
+
+    var hittable = [];
 
     var candy_cane_img = new Image();
     candy_cane_img.src = 'img/candycane.png';
@@ -70,17 +73,44 @@ var CandyCane = function() {
         }
     }
 
+    this.set_event_handle = function(fire) { fire_event = fire; };
+
     this.tick = function(t) {
         for (var i in container.children) {
             var item = container.children[i];
+
+            if (item.stuck) continue;
 
             // Move the mint
             item.speed.dy += 0.1;
             item.y += item.speed.dy;
             item.x += item.speed.dx;
             item.rotation += item.speed.dtheta;
+
+            var radius = item.size / 2;
+
+            for (var i in hittable) {
+                if (hittable[i](item)) {
+                    item.stuck = true;
+                    item.y -= 2;
+                }
+            }
+
+            if (item.x - radius > transform.provide.maxx || item.x + radius < transform.provide.minx || item.y - radius > transform.provide.maxy) {
+                container.removeChild(item);
+            }
+
         }
     };
+
+    this.get_interface = function() {
+        return {
+            add_hittable: function(fn) {
+                hittable.push(fn);
+            }
+        };
+    };
+
 };
 
 core.add_feature('candycane', new CandyCane());
