@@ -1,8 +1,8 @@
 var stage;
-var transform = new Transform(0, 100, 0, 100, .5, 1, 1);
+var transform = new Transform(0, 100, 0, 100, 0.5, 1, 1);
 var mods = {};
 
-var core = new (function() {
+var core = new(function() {
 
     var features = {};
     var initialized = false;
@@ -36,7 +36,7 @@ var core = new (function() {
     document.onkeydown = key_down;
     document.onkeyup = key_up;
 
-    this.resize_canvas = function () {
+    this.resize_canvas = function() {
         var old = transform.clone();
 
         do_resize();
@@ -47,12 +47,12 @@ var core = new (function() {
     };
     window.addEventListener('resize', this.resize_canvas, false);
 
-    this.tick = function () {
+    this.tick = function() {
         if (!initialized) {
             return;
         }
 
-        call_feature("tick", [Date.now() - start]);
+        call_feature('tick', [Date.now() - start]);
 
         stage.update();
     };
@@ -62,10 +62,10 @@ var core = new (function() {
             return false;
         };
 
-        document.body.onmousedown = function (e) {
+        document.body.onmousedown = function(e) {
             e = e || window.event;
 
-            if ('which' in e) {  // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
+            if ('which' in e) { // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
                 core.mouse_button = e.which === 3 ? 'right' : 'left';
             } else if ('button' in e) { // IE, Opera
                 core.mouse_button = e.button === 2 ? 'right' : 'left';
@@ -75,23 +75,29 @@ var core = new (function() {
         stage = new createjs.Stage('canvas');
 
         createjs.Ticker.setFPS(30);
-        createjs.Ticker.addEventListener("tick", this.tick);
+        createjs.Ticker.addEventListener('tick', this.tick);
 
-        this.set_background({color: "rgb(15, 50, 100)"});
+        this.set_background({
+            color: 'rgb(15, 50, 100)',
+        });
 
         do_resize();
 
-        call_feature("init");
+        call_feature('init');
 
         stage.sortChildren(function(a, b) {
-            if (a.z > b.z) { return 1; }
-            if (a.z < b.z) { return -1; }
+            if (a.z > b.z) {
+                return 1;
+            }
+            if (a.z < b.z) {
+                return -1;
+            }
             return 0;
         });
 
         initialized = true;
 
-        call_feature("post_init");
+        call_feature('post_init');
     };
 
     this.add_feature = function(name, feature) {
@@ -106,20 +112,28 @@ var core = new (function() {
         inter.add_event_listener = function(event, fn, callee) {
             var listeners = event_listeners[event] = event_listeners[event] || [];
 
-            if (callee) fn = fn.bind(callee);
+            if (callee) {
+                fn = fn.bind(callee);
+            }
             listeners.push(fn);
         };
 
         mods[name] = inter;
 
-        if (feature.set_event_handle) feature.set_event_handle( function(event, args) {
-            args.push(event);
+        if (feature.set_event_handle) {
+            feature.set_event_handle(function(event, args) {
+                args.push(event);
 
-            var forevent = event_listeners[event];
-            if (forevent) for (var i in forevent) {
-                if (forevent[i].apply(undefined, args)) break;
-            }
-        });
+                var forevent = event_listeners[event];
+                if (forevent) {
+                    for (var i in forevent) {
+                        if (forevent[i].apply(undefined, args)) {
+                            break;
+                        }
+                    }
+                }
+            });
+        }
     };
 
     this.rand = function(min, max) {
@@ -131,6 +145,8 @@ var core = new (function() {
     };
 
     this.set_background = function(back) {
-        if (back.color) stage.canvas.style.backgroundColor = back.color;
+        if (back.color) {
+            stage.canvas.style.backgroundColor = back.color;
+        }
     };
 })();

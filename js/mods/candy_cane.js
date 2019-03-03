@@ -73,7 +73,9 @@ var CandyCane = function() {
         }
     }
 
-    this.set_event_handle = function(fire) { fire_event = fire; };
+    this.set_event_handle = function(fire) {
+        fire_event = fire;
+    };
 
     this.tick = function(t) {
         for (var i in container.children) {

@@ -5,12 +5,16 @@ var UserCustomize = function() {
 
     this.key_event = function(key, state) {
         if (state) {
-            switch(key.key) {
+            switch (key.key) {
                 case "c":
-                    core.set_background({color: rand_color()});
+                    core.set_background({
+                        color: rand_color(),
+                    });
                     break;
                 case "d":
-                    core.set_background({color: prompt("Background color:\nex: red, #FF0000, rgb(255, 0, 0)", stage.canvas.style.backgroundColor)});
+                    core.set_background({
+                        color: prompt("Background color:\nex: red, #FF0000, rgb(255, 0, 0)", stage.canvas.style.backgroundColor),
+                    });
                     break;
             }
         }

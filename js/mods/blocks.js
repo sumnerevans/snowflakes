@@ -55,7 +55,9 @@ var Blocks = function() {
         });
         block.on('pressup', on_block_dragstop);
         block.on('click', function(e) {
-            if (core.mouse_button === 'right') { return; }
+            if (core.mouse_button === 'right') {
+                return;
+            }
             break_block(block);
         });
 
@@ -90,8 +92,11 @@ var Blocks = function() {
     }
 
     var first_drag = true;
+
     function on_block_drag(event) {
-        if (core.mouse_button === 'left') { return; }
+        if (core.mouse_button === 'left') {
+            return;
+        }
         if (!dragging) {
             dragging = create_block(event.rawX, event.rawY);
             container.addChild(dragging);
@@ -110,7 +115,9 @@ var Blocks = function() {
     }
 
     function on_block_dragstop(event) {
-        if (core.mouse_button === 'left') { return; }
+        if (core.mouse_button === 'left') {
+            return;
+        }
         dragging.start_fall = current_t;
         dragging.start_fall_y = dragging.y;
         dragging.falling = true;
@@ -151,8 +158,8 @@ var Blocks = function() {
                     if (b === block || b.falling ||
                         b.x + b.image.width * b.scaleX < block.x ||
                         b.x > block.x + block.image.width * block.scaleX ||
-                        block.start_fall_y + (block.scaleY * block.image.height)> b.y) {
-                            return;
+                        block.start_fall_y + (block.scaleY * block.image.height) > b.y) {
+                        return;
                     }
 
                     var btop = b.y - b.scaleY * b.regY;

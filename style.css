@@ -1,18 +1,22 @@
-* { 
-	margin: 0;
-	padding: 0; /* to remove the top and left whitespace */
-} 
+* {
+    /* to remove the top and left whitespace */
+    margin: 0;
+    padding: 0;
+}
 
-html, body {
-	width: 100%;
-	height: 100%; /* just to be sure these are full screen*/
+html,
+body {
+    /* just to be sure these are full screen */
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
-	display: block; /* To remove the scrollbars */
+    /* To remove the scrollbars */
+    display: block;
 }
 
-
 canvas {
-    background: #eee; /* to show the canvas bounds */
+    /* to show the canvas bounds */
+    background: #eee;
 }

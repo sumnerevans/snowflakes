@@ -1,4 +1,4 @@
-var Penguin = function () {
+var Penguin = function() {
     var container;
     var image_front = new Image();
     image_front.src = 'img/tux.png';
@@ -7,7 +7,7 @@ var Penguin = function () {
     var scale;
     var fire_event;
 
-    this.init = function () {
+    this.init = function() {
         container = new createjs.Container();
         container.z = 10;
 
@@ -28,10 +28,10 @@ var Penguin = function () {
             this.scaleX = scale;
             this.scaleY = scale;
 
-            this.y = transform.provide.maxy
-            - mods.floor.height * .1
-            - tallness
-            + this.regY * scale;
+            this.y = transform.provide.maxy -
+                mods.floor.height * .1 -
+                tallness +
+                this.regY * scale;
         };
         pen.recalc();
 
@@ -45,7 +45,7 @@ var Penguin = function () {
         container.addChild(pen);
     }
 
-    this.post_init = function () {
+    this.post_init = function() {
         mods.peppermints.add_event_listener('pop', create_penguin);
 
         mods.snowballs.add_hittable(function(ball) {
@@ -54,7 +54,7 @@ var Penguin = function () {
 
                 var pt = container.localToLocal(ball.x, ball.y, pen);
                 if (pen.hitTest(pt.x, pt.y)) {
-                    pen.speed *= (Math.sign(ball.speed.dx) ^ Math.sign(pen.speed))? -1:1;
+                    pen.speed *= (Math.sign(ball.speed.dx) ^ Math.sign(pen.speed)) ? -1 : 1;
                     return true;
                 }
             }
@@ -62,13 +62,15 @@ var Penguin = function () {
         });
     };
 
-    this.resize = function () {
+    this.resize = function() {
         scale = 13 / image_front.width;
         tallness = scale * image_front.height;
-        container.children.forEach(function(p) { p.recalc(); });
+        container.children.forEach(function(p) {
+            p.recalc();
+        });
     };
 
-    this.tick = function (t) {
+    this.tick = function(t) {
         for (var i in container.children) {
             var pen = container.children[i];
 
@@ -85,16 +87,16 @@ var Penguin = function () {
             } else {
                 if (t % 10 === 0) {
                     if (Math.random() < 0.05) pen.speed /= 2;
-                    else pen.speed += (pen.speed < 0)? -0.02:0.02;
+                    else pen.speed += (pen.speed < 0) ? -0.02 : 0.02;
                     pen.speed *= Math.abs(pen.speed) > 0.1 ? 0.9 : 1.1;
                 }
                 /* Allow direction changes inside our snow bank
                  * range at certain multiples of our position */
-                var p = (pen.x
-                    - transform.provide.minx
-                    - (0.12 * transform.provide.sizex))
-                    / (0.76 * transform.provide.sizex);
-                if (p > 0 && p < 1 && Math.floor(1000*p) % 150 == 0) {
+                var p = (pen.x -
+                        transform.provide.minx -
+                        (0.12 * transform.provide.sizex)) /
+                    (0.76 * transform.provide.sizex);
+                if (p > 0 && p < 1 && Math.floor(1000 * p) % 150 == 0) {
                     /* Do a bernoulli trial with probability 0.3 of success
                      * to change directions */
                     if (Math.random() < 0.3) pen.speed *= -0.25;
@@ -111,7 +113,9 @@ var Penguin = function () {
         return {};
     };
 
-    this.set_event_handle = function(fire) { fire_event = fire; };
+    this.set_event_handle = function(fire) {
+        fire_event = fire;
+    };
 
     function on_drag() {
         fire_event('drag', Array.prototype.slice.call(arguments));

@@ -24,7 +24,9 @@ var Peppermints = function() {
         });
     };
 
-    this.set_event_handle = function(fire) { fire_event = fire; };
+    this.set_event_handle = function(fire) {
+        fire_event = fire;
+    };
 
     function create_peppermint() {
         var bitmap = new createjs.Bitmap();
@@ -90,7 +92,9 @@ var Peppermints = function() {
 
     this.get_interface = function() {
         return {
-            get_pop_count: function() { return peppermint_counter; }
+            get_pop_count: function() {
+                return peppermint_counter;
+            }
         };
     };
 };

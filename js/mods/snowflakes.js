@@ -30,7 +30,9 @@ var Snowflakes = function() {
         }
     };
 
-    this.set_event_handle = function(fire) { fire_event = fire; };
+    this.set_event_handle = function(fire) {
+        fire_event = fire;
+    };
 
     function init_snowflake(bitmap) {
 
@@ -103,7 +105,9 @@ var Snowflakes = function() {
 
     this.get_interface = function() {
         return {
-            get_pop_count: function() { return snowflake_counter; }
+            get_pop_count: function() {
+                return snowflake_counter;
+            },
         };
     };
 };

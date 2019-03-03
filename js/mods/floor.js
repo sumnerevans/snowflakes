@@ -47,9 +47,13 @@ var Floor = function() {
         return hit;
     };
 
-    this.get_interface = function() { return inter; };
+    this.get_interface = function() {
+        return inter;
+    };
 
-    this.set_event_handle = function(fire) { fire_event = fire; };
+    this.set_event_handle = function(fire) {
+        fire_event = fire;
+    };
 
     function on_drag(e) {
         fire_event('drag', Array.prototype.slice.call(arguments));
